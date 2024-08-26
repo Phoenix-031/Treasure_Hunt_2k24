@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 import techtixImg from '@/assets/images/techtix.jpeg';
 import infinitioImg from'@/assets/images/infinitio.jpeg';
+import Link from 'next/link';
 
 const Home = () => {
   return (
@@ -20,7 +21,7 @@ const Home = () => {
         </div>
         <div>
           <div>
-            <p>Lets get going</p>
+            <p><Link href='/login'>Lets get going</Link></p>
           </div>
         </div>
       </div>

@@ -1,0 +1,46 @@
+@import '../../sass/functions';
+
+.main__container {
+    @include flex-container(column, center, center);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.user__longin__form {
+    @include flex-container(column, center, center);
+    gap: 1rem;
+    width: 80%;
+
+    &>div:nth-child(n) {
+        @include flex-container(column, flex-start, center);
+        width: 100%;
+
+        &>label {
+            width: 100%;
+        }
+
+        &>input {
+            width: 100%;
+            padding: 0.3rem;
+            background-color: transparent;
+            border-bottom: 1px solid var(--border-color);
+        }
+    }
+
+    button {
+        border: 1px solid var(--border-color);
+        width: 100%;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+    }
+}
+
+.button__general {
+    border: 1px solid var(--border-color);
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
