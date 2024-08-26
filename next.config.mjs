@@ -14,6 +14,10 @@ const withPWA = nextPWA({
   }
 });
 
-const nextConfig = {};
+const nextConfig = {
+    images: {
+    unoptimized: true,
+  },
+};
 
 export default withPWA(nextConfig);

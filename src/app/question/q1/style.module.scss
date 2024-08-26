@@ -8,4 +8,6 @@
     overflow: hidden;
     background-color: var(--background-color);
     color: var(--text-color);
+    @include flex-container(column, center, center);
+    padding: 1.5rem;
 }

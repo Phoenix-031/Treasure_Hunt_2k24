@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 export function middleware(request :  NextRequest){
 
     const userInfo= {
-        progress: 'puzzlesol_somecode_somecode_'
+        progress: 'puzzlesol_'
     }
 
     const progressLevel = userInfo.progress.split('_').length - 1;

@@ -1,0 +1,51 @@
+@import '../../sass/functions';
+
+.main__question__container {
+    width: 100%;
+    height: 100%;
+    @include flex-container(column, flex-center, items-center);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 3fr 1fr 1fr;
+
+    &>div:first-child {
+        width: 100%;
+        text-align: right;
+        font-family: Poppins, sans-serif;
+        font-size: 1.2rem
+    }
+
+    &>div:nth-child(2) {
+        @include flex-container(column, baseline, center);
+
+        &>p {
+            text-align: center;
+            font-family: Poppins, sans-serif;
+            font-size: 1.2rem;
+        }
+
+        &>div:last-child {
+            padding: 2rem 0;
+            @include flex-container(column, center, center);
+        }
+    }
+
+    &>div:nth-child(3) {
+        width: 100%;
+        @include flex-container(column, baseline, center);
+        gap: 1rem;
+    }
+
+
+    &>div:last-child {
+        @include flex-container(column, center, center);
+
+        button {
+            border: 1px solid var(--border-color);
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+    }
+
+}
