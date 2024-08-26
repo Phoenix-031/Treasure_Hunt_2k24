@@ -3,6 +3,7 @@
 import React from 'react'
 import styles from './style.module.scss'
 import { useRouter } from 'next/navigation'
+import { localStorageUtil } from '@/utils/localStorage.util'
 
 const StartUp = () => {
 
@@ -34,7 +35,12 @@ const StartUp = () => {
   function handleStartHunt() {
     // TODO : add logic that if the provided puzzle answer is correct then it would get the user to the first question and continue the game
 
-    router.push('/question/1')
+    localStorageUtil.setLocalStorageItem('userInfo',{"progress" : ''})
+
+    if(initialPuzzleAnswer === 'Secret') {
+        localStorageUtil.setLocalStorageItem('userInfo',{"progress" : "puzzlesol"})
+        router.push('/question/q1')
+    }
   }
 }
 
