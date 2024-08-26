@@ -41,7 +41,7 @@ const Login = () => {
         </form>
             
         <div className='fixed bottom-0 p-8'>
-          <p className='text-lg mb-5'>Didnt register yet?? Dont miss out on the fun</p>
+          <p className='text-lg mb-[1rem]'>Didnt register yet?? Dont miss out on the fun</p>
           <button className={styles.button__general}>Register Now!!</button>
         </div>
     </div>
