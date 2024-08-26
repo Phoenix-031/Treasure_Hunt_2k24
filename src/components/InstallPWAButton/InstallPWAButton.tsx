@@ -24,7 +24,7 @@ const InstallPWAButton = () => {
   }, [])
     
   return (
-    <div className='border-2 border-red-600 max-w-max rounded-lg'>
+    <div className='border-[1px] border-gray-400 max-w-max rounded-lg'>
         <button className='p-2' onClick={handleClick}>
             Install App
         </button>

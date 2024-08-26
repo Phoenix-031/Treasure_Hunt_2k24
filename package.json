@@ -10,10 +10,12 @@
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.8",
+    "gsap": "^3.12.5",
     "next": "14.2.6",
     "react": "^18",
     "react-dom": "^18",
-    "sass": "^1.77.8"
+    "sass": "^1.77.8",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@types/node": "^20",

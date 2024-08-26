@@ -1,0 +1,53 @@
+@import '../sass/functions';
+
+.main__container {
+    font-family: Poppins, sans-serif;
+    border: 1px solid var(--border-color);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: 1fr 2fr 1fr;
+
+    &>div:nth-child(2) {
+        @include flex-container(column, center, center);
+        padding: 3rem 0;
+
+        &>div:nth-child(1) {
+            &>p {
+                background-color: #4158D0;
+                background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+                font-weight: 700;
+                font-size: 3.5rem;
+                background-clip: text;
+                color: transparent;
+                -webkit-background-clip: text;
+                letter-spacing: calc(1em/20);
+                font-family: Poppins, sans-serif;
+            }
+        }
+
+        &>div:nth-child(2) {
+            width: 100%;
+            font-weight: 500;
+            font-family: Poppins, sans-serif;
+            font-size: 1.5rem;
+            @include flex-container(column, center, center);
+            gap: 3rem;
+            padding: 0.5rem;
+
+            &>div:first-child {
+                padding: 0.5rem;
+                border-radius: 0.5rem;
+                border: 1px solid var(--border-color);
+                width: 85%;
+                text-align: center;
+                font-size: 1.2rem;
+            }
+        }
+    }
+
+}
