@@ -14,4 +14,18 @@
     .lives__out {
         text-align: center;
     }
+
+    &>div:last-child {
+        width: 100%;
+        width: 100%;
+        @include flex-container(row, center, center);
+
+        &>button {
+            margin-top: 1rem;
+            border: 1px solid var(--border-color);
+            width: 80%;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+        }
+    }
 }

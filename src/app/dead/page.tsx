@@ -8,6 +8,10 @@ const LivesOut = () => {
             <p>Sorry!! You are out of lives</p>
             <p>Try again next time</p>
         </div>
+
+        <div>
+            <button>LeaderBoard</button>
+        </div>
     </div>
   )
 }
