@@ -6,12 +6,15 @@ import { FormType } from '@/types/form.type'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
+import { useAppDispatch } from '@/hooks/redux.hook'
+import { userActions } from '@/store/slices/user.slice'
 
 type UserLoginFormType = z.infer<typeof FormType.UserLoginForm>
 
 const Login = () => {
 
-   const router= useRouter()
+   const router= useRouter();
+   const dispatch = useAppDispatch();
 
    const {register,handleSubmit} = useForm({
     defaultValues:{
@@ -50,6 +53,7 @@ const Login = () => {
   async function onSubmitForm(data : UserLoginFormType) {
     console.log(data, "form data")
     router.push('/startup')
+    dispatch(userActions.setTeamName('someTeamName'))
   }
 }
 

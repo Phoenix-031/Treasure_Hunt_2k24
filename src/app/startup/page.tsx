@@ -4,15 +4,16 @@ import React from 'react'
 import styles from './style.module.scss'
 import { useRouter } from 'next/navigation'
 import { localStorageUtil } from '@/utils/localStorage.util'
-import { useAppDispatch } from '@/hooks/redux.hook'
+import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
+import { selectTeamName } from '@/store/selectors/user.selector'
 
 const StartUp = () => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const teamName=useAppSelector(selectTeamName);
 
-  const [teamName, setTeamName] = React.useState<string>('Test Team');
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
     
   return (
