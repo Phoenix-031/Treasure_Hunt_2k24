@@ -1,8 +1,14 @@
+'use client'
+
 import Image from 'next/image';
 import React from 'react'
 import styles from './style.module.scss';
+import { useAppDispatch } from '@/hooks/redux.hook';
+import { userActions } from '@/store/slices/user.slice';
+import { useRouter } from 'next/navigation';
 
 type QuestionProps = {
+    questionNumber : number
     question: string;
     imageUrl?: string;
     qrscanner?: boolean;
@@ -12,7 +18,10 @@ type QuestionProps = {
 
 const Question = (props : QuestionProps) => {
 
-  const { question, imageUrl, qrscanner, code, location } = props;
+  const {questionNumber, question, imageUrl, qrscanner, code, location } = props;
+
+  const dispatch = useAppDispatch();
+  const router = useRouter()
     
   return (
     <div className={styles.main__question__container}>
@@ -22,7 +31,7 @@ const Question = (props : QuestionProps) => {
         </div>
         
         <div>
-            <p>Sample question to be given on the screen choosing a big question length just in case</p>
+            <p>{question}</p>
 
             <div>
                 <Image src={imageUrl!} alt='Question' height={200} width={300} />
@@ -37,9 +46,23 @@ const Question = (props : QuestionProps) => {
 
         <div>
             {qrscanner && <button>Scan QR</button>}
+            <button className='mt-4' onClick={handleSubmit}>
+                Submit
+            </button>
         </div>
     </div>
   )
+
+  function handleSubmit() {
+    // TODO write the logic to say if the answer is correct or not then continue
+    dispatch(userActions.setProgressString(`question${questionNumber}`))
+    if(questionNumber !== 6) {
+        router.push(`/question/q${questionNumber+1}`)
+    }else {
+        router.push('/complete')
+    }
+
+  }
 }
 
 export default Question

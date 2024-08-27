@@ -4,10 +4,13 @@ import React from 'react'
 import styles from './style.module.scss'
 import { useRouter } from 'next/navigation'
 import { localStorageUtil } from '@/utils/localStorage.util'
+import { useAppDispatch } from '@/hooks/redux.hook'
+import { userActions } from '@/store/slices/user.slice'
 
 const StartUp = () => {
 
-  const router = useRouter()
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [teamName, setTeamName] = React.useState<string>('Test Team');
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
@@ -35,10 +38,8 @@ const StartUp = () => {
   function handleStartHunt() {
     // TODO : add logic that if the provided puzzle answer is correct then it would get the user to the first question and continue the game
 
-    localStorageUtil.setLocalStorageItem('userInfo',{"progress" : ''})
-
     if(initialPuzzleAnswer === 'Secret') {
-        localStorageUtil.setLocalStorageItem('userInfo',{"progress" : "puzzlesol"})
+        dispatch(userActions.setProgressString('puzzlesol_'))
         router.push('/question/q1')
     }
   }
