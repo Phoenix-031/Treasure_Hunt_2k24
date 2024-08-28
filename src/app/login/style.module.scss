@@ -1,4 +1,4 @@
-@import '../../sass/functions';
+@import '../../../sass/functions';
 
 .main__container {
     @include flex-container(column, center, center);
