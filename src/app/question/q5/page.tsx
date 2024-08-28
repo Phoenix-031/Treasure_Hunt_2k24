@@ -1,6 +1,9 @@
+'use client'
+
 import React from 'react'
 import styles from './style.module.scss'
 import Question from '@/components/Question/Question'
+import { withAuth } from '@/wrapper/AuthWrapper'
 
 
 const Question5 = () => {
@@ -16,5 +19,4 @@ const Question5 = () => {
     </div>
   )
 }
-
 export default Question5

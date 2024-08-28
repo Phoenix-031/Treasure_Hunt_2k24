@@ -41,6 +41,7 @@ const StartUp = () => {
 
     if(initialPuzzleAnswer === 'Secret') {
         dispatch(userActions.setProgressString('puzzlesol_'))
+        dispatch(userActions.setCurrentQuestionNumber(1))
         router.push('/question/q1')
     }
   }

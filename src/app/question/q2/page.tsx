@@ -1,9 +1,30 @@
-import React from 'react'
+'use client'
+
+import React, { useLayoutEffect } from 'react'
 import styles from './style.module.scss'
 import Question from '@/components/Question/Question'
-
+import { withAuth } from '@/wrapper/AuthWrapper'
+import { useRouter } from 'next/navigation'
+import { redirect, usePathname } from 'next/navigation'
+import { useAppSelector } from '@/hooks/redux.hook'
+import { selectCurrentQuestionNumber, selectProgressString } from '@/store/selectors/user.selector'
 
 const Question2 = () => {
+
+    const progressString = useAppSelector(selectProgressString)
+    const currentQuestionNumber= useAppSelector(selectCurrentQuestionNumber);
+    const router = useRouter()
+    const pathname = usePathname();
+
+    const questionNumber= Number(pathname.split('/')[2].split('q')[1])
+    const progress = progressString.split('_').length -2
+
+    useLayoutEffect(() => {
+      if (progress!== questionNumber) {
+        redirect(`/question/q${currentQuestionNumber}`);
+      }
+    }, [])
+  
   return (
     <div className={styles.main__container}>
         <Question 
@@ -17,4 +38,4 @@ const Question2 = () => {
   )
 }
 
-export default Question2
+export default Question2;

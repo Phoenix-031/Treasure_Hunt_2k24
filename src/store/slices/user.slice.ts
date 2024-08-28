@@ -7,15 +7,17 @@ type UserSliceType = {
     progressString : string,
     currentQuestionNumber : number,
     teamId : string
+    isDisqualified : boolean,
 }
 
 const initialState: UserSliceType= {
-    currentQuestionNumber: 0,
+    currentQuestionNumber: 1,
     teamName: '',
     numberOfLives: 5,
     validationString: '',
     progressString: '',
-    teamId: ''
+    teamId: '',
+    isDisqualified: false,
 }
 
 export const userSliceLabel = 'UserSlice';
