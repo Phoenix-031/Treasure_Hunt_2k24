@@ -6,13 +6,14 @@ import { useRouter } from 'next/navigation'
 import { localStorageUtil } from '@/utils/localStorage.util'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
-import { selectTeamName } from '@/store/selectors/user.selector'
+import { selectTeamId, selectTeamName } from '@/store/selectors/user.selector'
 
 const StartUp = () => {
 
   const router = useRouter();
   const dispatch = useAppDispatch();
   const teamName=useAppSelector(selectTeamName);
+  const teamId = useAppSelector(selectTeamId);
 
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
     
@@ -42,7 +43,7 @@ const StartUp = () => {
     if(initialPuzzleAnswer === 'Secret') {
         dispatch(userActions.setProgressString('puzzlesol_'))
         dispatch(userActions.setCurrentQuestionNumber(1))
-        router.push('/question/q1')
+        router.push(`${teamId}/question/q1`)
     }
   }
 }

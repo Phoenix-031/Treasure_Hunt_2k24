@@ -1,24 +1,28 @@
 import { NextRequest, NextResponse } from "next/server"
-import { store } from "./store";
+import { api } from "./query/api";
 
-export function middleware(request :  NextRequest){
+export async function middleware(request :  NextRequest){
 
-    const userInfo= {
-        progress: 'puzzlesol_'
+    const response = NextResponse.next();
+
+    const teamId = request.nextUrl.pathname.split('/')[1]
+    const questionId = request.nextUrl.pathname.split('/')[3]
+
+    const team = await api.get(`/team/${teamId}`)
+    const teamData= team.data;
+    const currentTeamStage = teamData.data.currentQuestionStage;
+    const stageId = `q${teamData.data.currentQuestionStage}`
+
+    if(currentTeamStage === null){
+        return NextResponse.redirect(new URL('/auth/login', request.url));
+    }
+    else if(stageId !== questionId){
+       return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
     }
 
-
-    // const progressLevel = userInfo.progress.split('_').length - 1;
-    // const currentQuestion = parseInt(request.nextUrl.pathname.split('/')[2][1]);
-
-
-    // if (currentQuestion !== progressLevel) {
-    //     return NextResponse.rewrite(new URL(`/question/q${progressLevel}`, request.url));
-    // }
-
-        return NextResponse.next()
+    return response;
 }
 
 export const config = {
-    // matcher: ['/question/q(\\d+)'],
+    matcher: ['/([a-zA-Z0-9_-]+)/question/q([1-6])'],
 }

@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import '../sass/global.scss';
 import { Fonts } from "@/lib/fonts";
 
-import { Provider } from "react-redux";
-import { store } from "@/store";
 import StoreProvider from "@/store/StoreProvider";
+import QueryProvider from "@/query/QueryProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,11 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <StoreProvider>
-      <html lang="en">
-        <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
-            {children}
-        </body>
-      </html>
+      {/* <QueryProvider> */}
+        <html lang="en">
+          <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
+              {children}
+          </body>
+        </html>
+      {/* </QueryProvider> */}
     </StoreProvider>
   );
 }

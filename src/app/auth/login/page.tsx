@@ -57,9 +57,9 @@ const Login = () => {
   )
 
   async function onSubmitForm(data : UserLoginFormType) {
-    console.log(data, "form data")
+    dispatch(userActions.setTeamId('team456'))
+    dispatch(userActions.setTeamName("spmeTeamName"))
     router.push('/startup')
-    dispatch(userActions.setTeamName('someTeamName'))
   }
 }
 
