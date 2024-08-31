@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useActionState, useEffect, useState } from 'react'
 import styles from './style.module.scss';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
@@ -21,6 +21,10 @@ const Scan = () => {
 
   const handleScan = (data: string) => {
     setQRData(data);
+    navigator.clipboard.writeText(data);
+    alert("code copied to clipboard")
+    dispatch(userActions.setQrCodeValue(data));
+    router.push(`${teamId}/question/q${questionStage}`);
   };
 
   // useEffect(() => {
@@ -34,7 +38,10 @@ const Scan = () => {
   return (
     <div className={styles.main__container}>
         <QRScanner onScan={handleScan}/>
-      {qrData && <p>Scanned QR Code Data: {qrData}</p>}
+        <div>
+          <p>Scanned Code :</p>
+          <p>{qrData}</p>
+        </div>
     </div>
   )
 }
