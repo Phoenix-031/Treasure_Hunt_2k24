@@ -1,13 +1,14 @@
 'use client'
 
 import Image from 'next/image';
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './style.module.scss';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { selectCurrentQuestionNumber, selectNumberOfLives, selectQrCodeValue, selectTeamId } from '@/store/selectors/user.selector';
 import { useUpdateTeam } from '@/query/api/user.service';
+import { number } from 'zod';
 
 type QuestionProps = {
     questionNumber : number
@@ -83,6 +84,10 @@ const Question = (props : QuestionProps) => {
   async function handleSubmit() {
 
     // if qrcodevalue is wrong for the given question
+
+    if(teamLives === 0) {
+        router.push('/dead')
+    }
 
     if(qrCodeValue !== 'qrvalue1') {
         const res = await updateTeam.mutateAsync({

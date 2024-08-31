@@ -13,6 +13,10 @@ export async function middleware(request :  NextRequest){
     const currentTeamStage = teamData.data.currentQuestionStage;
     const stageId = `q${teamData.data.currentQuestionStage}`
 
+    if(teamData.data.isDisqualified){
+        return NextResponse.redirect(new URL('/dead', request.url));
+    }
+
     if(currentTeamStage === null){
         return NextResponse.redirect(new URL('/auth/login', request.url));
     }

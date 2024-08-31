@@ -1,13 +1,13 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './style.module.scss'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { localStorageUtil } from '@/utils/localStorage.util'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamId, selectTeamName } from '@/store/selectors/user.selector'
-import { useUpdateTeam } from '@/query/api/user.service'
+import { useGetTeamById, useUpdateTeam } from '@/query/api/user.service'
 import { NumberOfLives } from '@/constants/constant'
 
 const StartUp = () => {
@@ -18,8 +18,16 @@ const StartUp = () => {
   const teamId = useAppSelector(selectTeamId);
 
   const updateTeamStage = useUpdateTeam();
+  const getTeam = useGetTeamById(teamId);
 
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
+
+  useEffect(() => {
+    if(!getTeam.isLoading){
+      if(getTeam.data.data.isDisqualified) redirect('/dead')
+    }
+  }, [getTeam.isLoading, getTeam.data])
+
     
   return (
     <div className={styles.main__container}>
@@ -49,6 +57,7 @@ const StartUp = () => {
         const res = await updateTeamStage.mutateAsync({
           currentQuestionStage : 1,
         })
+
 
         if(res) {
           dispatch(userActions.setProgressString('puzzlesol_'))

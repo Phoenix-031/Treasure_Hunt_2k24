@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamName } from '@/store/selectors/user.selector'
+import { useGetTeamById } from '@/query/api/user.service'
 
 type UserLoginFormType = z.infer<typeof FormType.UserLoginForm>
 
@@ -18,12 +19,13 @@ const Login = () => {
    const dispatch = useAppDispatch();
    const teamName = useAppSelector(selectTeamName)
 
-  //  useLayoutEffect(() => {
-  //   if(!teamName) router.push('/')
-  //  })
+  //  const [teamId, setTeamId] = useState('')
+
+  //  const getTeam = useGetTeamById(teamId);
 
    const {register,handleSubmit} = useForm({
     defaultValues:{
+        teamId: '',
         teamName: '',
         espektroId: '',
     }
@@ -33,6 +35,12 @@ const Login = () => {
   return (
     <div className={styles.main__container}>
         <form onSubmit={handleSubmit(onSubmitForm)} className={styles.user__longin__form}>
+            <div>
+               <label htmlFor="">TeamId</label>
+                <input {...register('teamId',{
+                    required:'Please enter the team id to continue'
+                })}/>
+            </div>
             <div>
                 <label htmlFor="">TeamName</label>
                 <input {...register('teamName',{
@@ -57,6 +65,7 @@ const Login = () => {
   )
 
   async function onSubmitForm(data : UserLoginFormType) {
+  
     dispatch(userActions.setTeamId('team456'))
     dispatch(userActions.setTeamName("spmeTeamName"))
     router.push('/startup')
