@@ -13,7 +13,7 @@ export async function middleware(request :  NextRequest){
     const currentTeamStage = teamData.data.currentQuestionStage;
     const stageId = `q${teamData.data.currentQuestionStage}`
 
-    if(teamData.data.isDisqualified){
+    if(teamData.data.isDisqualified || teamData.data.numberOfLives === -1){
         return NextResponse.redirect(new URL('/dead', request.url));
     }
 
