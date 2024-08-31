@@ -7,6 +7,7 @@ import { localStorageUtil } from '@/utils/localStorage.util'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamId, selectTeamName } from '@/store/selectors/user.selector'
+import { useUpdateTeamStage } from '@/query/api/user.service'
 
 const StartUp = () => {
 
@@ -14,6 +15,8 @@ const StartUp = () => {
   const dispatch = useAppDispatch();
   const teamName=useAppSelector(selectTeamName);
   const teamId = useAppSelector(selectTeamId);
+
+  const updateTeamStage = useUpdateTeamStage();
 
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
     
@@ -37,12 +40,17 @@ const StartUp = () => {
     </div>
   )
 
-  function handleStartHunt() {
+  async function handleStartHunt() {
     // TODO : add logic that if the provided puzzle answer is correct then it would get the user to the first question and continue the game
 
     if(initialPuzzleAnswer === 'Secret') {
         dispatch(userActions.setProgressString('puzzlesol_'))
-        dispatch(userActions.setCurrentQuestionNumber(1))
+        dispatch(userActions.setCurrentQuestionNumber(1));
+
+        const res = await updateTeamStage.mutateAsync({
+          currentQuestionStage : 1,
+        })
+
         router.push(`${teamId}/question/q1`)
     }
   }

@@ -17,13 +17,16 @@ export async function middleware(request :  NextRequest){
         return NextResponse.redirect(new URL('/auth/login', request.url));
     }
     else if(stageId !== questionId){
-       return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
+        if(teamData.data.currentQuestionStage === 0){
+            return NextResponse.redirect(new URL('/startup', request.url));
+        }else {
+            return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
+        }
     }
 
     return response;
 }
 
 export const config = {
-
     matcher: ['/((?!api).*)/question/q([1-6])'],
 }
