@@ -18,8 +18,7 @@ export const useGetQuestion = (id: string) => {
     return useQuery({
         queryKey: ["question", id],
         queryFn: async () => {
-            const res = await axios.get('http://localhost:3000/api/question/'+ id)
-            console.log(res,"resdaa")
+            const res = await api.get('/api/question/'+ id)
             return res.data;
         },
     });
