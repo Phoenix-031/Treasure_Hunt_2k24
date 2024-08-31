@@ -7,7 +7,8 @@ import { localStorageUtil } from '@/utils/localStorage.util'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamId, selectTeamName } from '@/store/selectors/user.selector'
-import { useUpdateTeamStage } from '@/query/api/user.service'
+import { useUpdateTeam } from '@/query/api/user.service'
+import { NumberOfLives } from '@/constants/constant'
 
 const StartUp = () => {
 
@@ -16,7 +17,7 @@ const StartUp = () => {
   const teamName=useAppSelector(selectTeamName);
   const teamId = useAppSelector(selectTeamId);
 
-  const updateTeamStage = useUpdateTeamStage();
+  const updateTeamStage = useUpdateTeam();
 
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
     
@@ -52,6 +53,7 @@ const StartUp = () => {
         if(res) {
           dispatch(userActions.setProgressString('puzzlesol_'))
           dispatch(userActions.setCurrentQuestionNumber(1));
+          dispatch(userActions.setNumberOfLives(NumberOfLives));
         }
 
         router.push(`${teamId}/question/q1`)

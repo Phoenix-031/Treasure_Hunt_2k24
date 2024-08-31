@@ -18,13 +18,13 @@ export default function RootLayout({
 }>) {
   return (
     <StoreProvider>
-      <QueryProvider>
-        <html lang="en">
-          <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
-              {children}
-          </body>
-        </html>
-      </QueryProvider>
+        <QueryProvider>
+          <html lang="en">
+            <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
+                {children}
+            </body>
+          </html>
+        </QueryProvider>
     </StoreProvider>
   );
 }

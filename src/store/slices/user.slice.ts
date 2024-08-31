@@ -14,7 +14,7 @@ type UserSliceType = {
 const initialState: UserSliceType= {
     currentQuestionNumber: 1,
     teamName: '',
-    numberOfLives: 5,
+    numberOfLives: 0,
     validationString: '',
     progressString: '',
     teamId: '',

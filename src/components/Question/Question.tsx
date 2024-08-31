@@ -1,13 +1,13 @@
 'use client'
 
 import Image from 'next/image';
-import React, { useState } from 'react'
+import React from 'react'
 import styles from './style.module.scss';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
 import { useRouter } from 'next/navigation';
 import { selectCurrentQuestionNumber, selectNumberOfLives, selectQrCodeValue, selectTeamId } from '@/store/selectors/user.selector';
-import { useUpdateTeamStage } from '@/query/api/user.service';
+import { useUpdateTeam } from '@/query/api/user.service';
 
 type QuestionProps = {
     questionNumber : number
@@ -27,8 +27,9 @@ const Question = (props : QuestionProps) => {
   const teamLives = useAppSelector(selectNumberOfLives)
   const teamId = useAppSelector(selectTeamId)
   const qrCodeValue = useAppSelector(selectQrCodeValue)
+  const numberOfLives = useAppSelector(selectNumberOfLives);
 
-  const updatedTeamStage = useUpdateTeamStage();
+  const updateTeam = useUpdateTeam();
 
   return (
     <div className={styles.main__question__container}>
@@ -80,21 +81,32 @@ const Question = (props : QuestionProps) => {
   }
   
   async function handleSubmit() {
-    dispatch(userActions.setProgressString(`/${teamId}/question/${questionNumber}`))
-    dispatch(userActions.setQrCodeValue(''))
 
-    if(questionNumber !== 6) {
-        const res = await updatedTeamStage.mutateAsync({
-            currentQuestionStage : questionNumber+1,
+    // if qrcodevalue is wrong for the given question
+
+    if(qrCodeValue !== 'qrvalue1') {
+        const res = await updateTeam.mutateAsync({
+            numberOfLives : numberOfLives -1 
         })
-        if(res){
-            dispatch(userActions.setCurrentQuestionNumber(questionNumber+1))
-            router.push(`/${teamId}/question/q${questionNumber+1}`)
+        if(res) {
+            dispatch(userActions.setNumberOfLives(numberOfLives -1))
         }
     }else {
-        router.push('/complete')
-    }
+        dispatch(userActions.setProgressString(`/${teamId}/question/${questionNumber}`))
 
+        if(questionNumber !== 6) {
+            const res = await updateTeam.mutateAsync({
+                currentQuestionStage : questionNumber+1,
+            })
+            if(res){
+                dispatch(userActions.setCurrentQuestionNumber(questionNumber+1))
+                router.push(`/${teamId}/question/q${questionNumber+1}`)
+            }
+        }else {
+            router.push('/complete')
+        }
+    }
+    dispatch(userActions.setQrCodeValue(''))
   }
 }
 

@@ -46,8 +46,7 @@ export async function PUT(req: NextRequest, { params }: { params: { teamId: stri
         const teamId = params.teamId;
         const body = await req.json();
 
-        console.log(body, "ths is body")
-        
+
         const updateFields: Partial<TeamUpdateRequest> = {};
         if (body.teamName) updateFields['teamName'] = body.teamName;
         if (body.numberOfLives !== undefined) updateFields['numberOfLives'] = body.numberOfLives;
