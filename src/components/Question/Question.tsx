@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
 import { useRouter } from 'next/navigation';
 import { selectNumberOfLives, selectTeamId } from '@/store/selectors/user.selector';
+import { useUpdateTeamStage } from '@/query/api/user.service';
 
 type QuestionProps = {
     questionNumber : number
@@ -25,6 +26,8 @@ const Question = (props : QuestionProps) => {
   const router = useRouter();
   const teamLives = useAppSelector(selectNumberOfLives)
   const teamId = useAppSelector(selectTeamId)
+
+  const updatedTeamStage = useUpdateTeamStage();
     
   return (
     <div className={styles.main__question__container}>
@@ -56,10 +59,12 @@ const Question = (props : QuestionProps) => {
     </div>
   )
 
-  function handleSubmit() {
-    // TODO write the logic to say if the answer is correct or not then continue
+  async function handleSubmit() {
     dispatch(userActions.setProgressString(`/${teamId}/question/${questionNumber}`))
     if(questionNumber !== 6) {
+        updatedTeamStage.mutateAsync({
+            currentQuestionStage : questionNumber+1,
+        })
         router.push(`/${teamId}/question/q${questionNumber+1}`)
     }else {
         router.push('/complete')
