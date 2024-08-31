@@ -1,6 +1,7 @@
 // components/QRScanner.tsx
 import { useEffect, useRef } from 'react';
 import jsQR from 'jsqr';
+import styles from './style.module.scss';
 
 interface QRScannerProps {
   onScan: (data: string) => void;
@@ -52,9 +53,15 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan }) => {
   }, [onScan]);
 
   return (
-    <div>
-      <video ref={videoRef} style={{ display: 'none' }} />
-      <canvas ref={canvasRef} style={{ width: '100%' }} />
+    <div className={styles.scannerContainer}>
+      <video ref={videoRef} className={styles.video} />
+      <canvas ref={canvasRef} className={styles.canvas} />
+      <div className={styles.frame}>
+        <div className={styles.frameCorner}></div>
+        <div className={styles.frameCorner}></div>
+        <div className={styles.frameCorner}></div>
+        <div className={styles.frameCorner}></div>
+      </div>
     </div>
   );
 };
