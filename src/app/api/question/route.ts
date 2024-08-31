@@ -4,6 +4,7 @@ import connectDB from '@/app/api/_config/connectDb';
 import QuestionModel from '../_model/question.model';
 import { z } from 'zod';
 import { QuestionSchema } from '../_validation/question.validation';
+import { headers } from 'next/headers';
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,7 +13,10 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       message: 'Welcome to instructions',
-      data : result
+      data : result,
+      headers:{
+        'ACCESS-CONTROL-ALLOW-ORIGIN': '*'
+      }
     });
   } catch (error) {
     return NextResponse.json({
@@ -46,13 +50,16 @@ export async function POST(req: NextRequest) {
         
         return NextResponse.json({
             message: 'Question added successfully',
-            data: res
+            data: res,
+            headers:{
+              'ACCESS-CONTROL-ALLOW-ORIGIN': '*'
+            }
         })
         
     } catch (error) {
         return NextResponse.json({
         message: 'An error occurred while processing your request.',
         description: JSON.stringify(error),
-        });   
+        });
     }
 }

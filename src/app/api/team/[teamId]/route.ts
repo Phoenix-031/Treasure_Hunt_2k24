@@ -16,7 +16,10 @@ export async function GET(req : NextRequest, {params} : {params : {teamId : stri
 
         return NextResponse.json({
             message: 'Team retrieved successfully',
-            data: res
+            data: res,
+            headers:{
+                'ACCESS-CONTROL-ALLOW-ORIGIN': '*'
+            }
         })
         
     } catch (error) {
