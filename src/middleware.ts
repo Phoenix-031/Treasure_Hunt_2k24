@@ -16,12 +16,12 @@ export async function middleware(request :  NextRequest){
     const currentTeamStage = teamData.data.currentQuestionStage;
     const stageId = `q${teamData.data.currentQuestionStage}`
 
-    if(currentTeamStage === null){
-        return NextResponse.redirect(new URL('/auth/login', request.url));
-    }
-    else if(stageId !== questionId){
-       return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
-    }
+    // if(currentTeamStage === null){
+    //     return NextResponse.redirect(new URL('/auth/login', request.url));
+    // }
+    // else if(stageId !== questionId){
+    //    return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
+    // }
 
     return response;
 }

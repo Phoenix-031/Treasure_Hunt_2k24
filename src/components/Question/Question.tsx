@@ -58,7 +58,7 @@ const Question = (props : QuestionProps) => {
 
   function handleSubmit() {
     // TODO write the logic to say if the answer is correct or not then continue
-    dispatch(userActions.setProgressString(`question${questionNumber}`))
+    dispatch(userActions.setProgressString(`/${teamId}/question/${questionNumber}`))
     if(questionNumber !== 6) {
         router.push(`/${teamId}/question/q${questionNumber+1}`)
     }else {
