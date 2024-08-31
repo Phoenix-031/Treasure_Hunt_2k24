@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './style.module.scss';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { selectCurrentQuestionNumber, selectTeamId } from '@/store/selectors/user.selector';
 import { userActions } from '@/store/slices/user.slice';
+import QRScanner from '@/components/QrScanner/QrScanner';
 
 const Scan = () => {
 
@@ -16,17 +17,24 @@ const Scan = () => {
 
   const dispatch = useAppDispatch()
 
-  useEffect(() => {
+  const [qrData, setQRData] = useState<string>('');
+
+  const handleScan = (data: string) => {
+    setQRData(data);
+  };
+
+  // useEffect(() => {
     
-    setTimeout(()=> {
-        dispatch(userActions.setQrCodeValue('qrvalue'));
-        router.push(`${teamId}/question/q${questionStage}`);
-    }, 2000)
-  }, [])
+  //   setTimeout(()=> {
+  //       dispatch(userActions.setQrCodeValue('qrvalue'));
+  //       router.push(`${teamId}/question/q${questionStage}`);
+  //   }, 2000)
+  // }, [])
     
   return (
     <div className={styles.main__container}>
-        <p>Scan</p>
+        <QRScanner onScan={handleScan}/>
+      {qrData && <p>Scanned QR Code Data: {qrData}</p>}
     </div>
   )
 }
