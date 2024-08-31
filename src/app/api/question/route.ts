@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import connectDB from '@/app/api/_config/connectDb';
 import QuestionModel from '../_model/question.model';
-import { z } from 'zod';
 import { QuestionSchema } from '../_validation/question.validation';
-import { headers } from 'next/headers';
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,11 +10,8 @@ export async function GET(req: NextRequest) {
     const result= await QuestionModel.find({})
 
     return NextResponse.json({
-      message: 'Welcome to instructions',
+      message: 'fetched all questions',
       data : result,
-      headers:{
-        'ACCESS-CONTROL-ALLOW-ORIGIN': '*'
-      }
     });
   } catch (error) {
     return NextResponse.json({
@@ -51,9 +46,6 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
             message: 'Question added successfully',
             data: res,
-            headers:{
-              'ACCESS-CONTROL-ALLOW-ORIGIN': '*'
-            }
         })
         
     } catch (error) {
@@ -62,4 +54,17 @@ export async function POST(req: NextRequest) {
         description: JSON.stringify(error),
         });
     }
+}
+
+export async function DELETE() {
+  try {
+    await connectDB();
+    await QuestionModel.deleteMany({});
+    return NextResponse.json({ message: 'All questions deleted successfully' });
+  } catch (error) {
+    return NextResponse.json({
+      message: 'An error occurred while processing your request.',
+      description: JSON.stringify(error),
+    });
+  }
 }

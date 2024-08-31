@@ -8,6 +8,7 @@ type UserSliceType = {
     currentQuestionNumber : number,
     teamId : string
     isDisqualified : boolean,
+    qrCodeValue : string,
 }
 
 const initialState: UserSliceType= {
@@ -18,6 +19,7 @@ const initialState: UserSliceType= {
     progressString: '',
     teamId: '',
     isDisqualified: false,
+    qrCodeValue: '',
 }
 
 export const userSliceLabel = 'UserSlice';
@@ -43,6 +45,9 @@ export const userSlice = createSlice({
         },
         setTeamId: (state, action: PayloadAction<string>) => {
             state.teamId = action.payload;
+        },
+        setQrCodeValue:(state, action: PayloadAction<string>) => {
+            state.qrCodeValue = action.payload;
         },
     },
 })

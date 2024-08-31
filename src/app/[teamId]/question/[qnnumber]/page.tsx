@@ -27,7 +27,7 @@ const QuestionPage = ({params} : PageType) => {
           </div>
         ) : (
           <>
-            <Question question = {getsingleQuestion.data.data[0].question} imageUrl={getsingleQuestion.data.data[0].questionImage} questionNumber={Number(params.qnnumber.split('q')[1])}/>
+            <Question question = {getsingleQuestion.data.data[0].question} imageUrl={getsingleQuestion.data.data[0].questionImage} questionNumber={Number(params.qnnumber.split('q')[1])} qrscanner={true}/>
           </>
         )
       }

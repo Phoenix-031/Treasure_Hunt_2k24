@@ -7,6 +7,7 @@ const _selectProgressString = (state: RootState) => state.UserSlice.progressStri
 const _selectTeamId = (state: RootState) => state.UserSlice.teamId;
 const _selectCurrentQuestionNumber = (state: RootState) => state.UserSlice.currentQuestionNumber;
 const _selectIsDisqualified = (state: RootState) => state.UserSlice.isDisqualified;
+const _selectQrCodeValue = (state: RootState) => state.UserSlice.qrCodeValue;
 
 export const selectTeamName = _selectTeamName;
 export const selectNumberOfLives = _selectNumberOfLives;
@@ -15,3 +16,4 @@ export const selectProgressString = _selectProgressString;
 export const selectTeamId = _selectTeamId;
 export const selectCurrentQuestionNumber = _selectCurrentQuestionNumber;
 export const selectIsDisqualified = _selectIsDisqualified;
+export const selectQrCodeValue = _selectQrCodeValue;

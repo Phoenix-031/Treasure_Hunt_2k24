@@ -15,9 +15,6 @@ export async function GET(req : NextRequest, {params} : {params : {teamId : stri
         return NextResponse.json({
             message: 'Team retrieved successfully',
             data: res,
-            headers:{
-                'ACCESS-CONTROL-ALLOW-ORIGIN': '*'
-            }
         })
         
     } catch (error) {
@@ -79,7 +76,24 @@ export async function PUT(req: NextRequest, { params }: { params: { teamId: stri
         });
         
     } catch (error) {
-        console.error('Error updating team:', error);
+        return NextResponse.json({
+            status: 500,
+            message: 'An error occurred while processing your request.',
+            body: JSON.stringify({ message: "Internal Server Error" }),
+        });
+    }
+}
+
+export async function DELETE(req: NextRequest, { params }: { params: { teamId: string } }) {
+    try {
+        await connectDB();
+        const deleteTeam = await TeamModel.deleteOne({
+            teamId : params.teamId,
+        });
+        return NextResponse.json({
+            message: 'Team deleted successfully',
+        });
+    } catch (error) {
         return NextResponse.json({
             status: 500,
             message: 'An error occurred while processing your request.',

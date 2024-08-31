@@ -35,11 +35,23 @@
         width: 100%;
         @include flex-container(column, baseline, center);
         gap: 1rem;
+
+        &>p:last-child {
+            margin-top: 1rem;
+            border: 1px solid white;
+            width: 80%;
+        }
     }
 
 
     &>div:last-child {
         @include flex-container(column, center, center);
+
+        &>div:last-child {
+            margin-top: 1rem;
+            width: 100%;
+            @include flex-container(row, flex-end, center);
+        }
 
         button {
             border: 1px solid var(--border-color);

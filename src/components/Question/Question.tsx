@@ -1,12 +1,12 @@
 'use client'
 
 import Image from 'next/image';
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './style.module.scss';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
 import { useRouter } from 'next/navigation';
-import { selectNumberOfLives, selectTeamId } from '@/store/selectors/user.selector';
+import { selectCurrentQuestionNumber, selectNumberOfLives, selectQrCodeValue, selectTeamId } from '@/store/selectors/user.selector';
 import { useUpdateTeamStage } from '@/query/api/user.service';
 
 type QuestionProps = {
@@ -26,9 +26,10 @@ const Question = (props : QuestionProps) => {
   const router = useRouter();
   const teamLives = useAppSelector(selectNumberOfLives)
   const teamId = useAppSelector(selectTeamId)
+  const qrCodeValue = useAppSelector(selectQrCodeValue)
 
   const updatedTeamStage = useUpdateTeamStage();
-    
+
   return (
     <div className={styles.main__question__container}>
 
@@ -45,27 +46,51 @@ const Question = (props : QuestionProps) => {
         </div>
 
         <div>
-            <p>
-                {location}
-            </p>
+            <p>Code: </p>
+            <p>{qrCodeValue}</p>
         </div>
 
         <div>
-            {qrscanner && <button>Scan QR</button>}
-            <button className='mt-4' onClick={handleSubmit}>
-                Submit
-            </button>
+            {qrscanner ? (
+                qrCodeValue !== '' ? (
+                    <div>
+                        <button onClick={handleSubmit}>
+                            Submit
+                        </button>
+                        <button onClick={handleCancelCode}>
+                            Cancel
+                        </button>
+                    </div>
+                ) : (
+                    <div>
+                        <button onClick={handleScanQR}>Scan QR</button>
+                    </div>
+                )
+            ) : null}
         </div>
     </div>
   )
 
+  function handleScanQR() {
+    router.push('/scan')
+  }
+
+  function handleCancelCode() {
+    dispatch(userActions.setQrCodeValue(''))
+  }
+  
   async function handleSubmit() {
     dispatch(userActions.setProgressString(`/${teamId}/question/${questionNumber}`))
+    dispatch(userActions.setQrCodeValue(''))
+
     if(questionNumber !== 6) {
-        updatedTeamStage.mutateAsync({
+        const res = await updatedTeamStage.mutateAsync({
             currentQuestionStage : questionNumber+1,
         })
-        router.push(`/${teamId}/question/q${questionNumber+1}`)
+        if(res){
+            dispatch(userActions.setCurrentQuestionNumber(questionNumber+1))
+            router.push(`/${teamId}/question/q${questionNumber+1}`)
+        }
     }else {
         router.push('/complete')
     }

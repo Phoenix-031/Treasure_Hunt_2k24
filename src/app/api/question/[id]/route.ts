@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import connectDB from "../../_config/connectDb";
 import QuestionModel from "../../_model/question.model";
-import { connect } from "http2";
 import { QuestionSchema } from "../../_validation/question.validation";
 
 export async function GET(req : NextRequest,{params} : {params : {id : string}}) {
