@@ -5,7 +5,7 @@ import styles from './style.module.scss';
 const Loader = () => {
   return (
     <div className={styles.loader__container}>
-        <HashLoader color='#E86A33'/>
+        <HashLoader color='#E86A33' />
     </div>
   )
 }

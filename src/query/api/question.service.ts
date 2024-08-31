@@ -1,21 +1,25 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from ".";
+import axios from "axios";
 
 export const useGetQuestions = () => {
     return useQuery({
         queryKey: ["questions"],
         queryFn: async () => {
             const res = await api.get('/')
+            console.log(res,"rsponse")
             return res.data;
         },
     });
 }
 
 export const useGetQuestion = (id: string) => {
+
     return useQuery({
         queryKey: ["question", id],
         queryFn: async () => {
-            const res = await api.get(`question/${id}`)
+            const res = await axios.get('http://localhost:3000/api/question/'+ id)
+            console.log(res,"resdaa")
             return res.data;
         },
     });

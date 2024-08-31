@@ -3,9 +3,10 @@
 import Image from 'next/image';
 import React from 'react'
 import styles from './style.module.scss';
-import { useAppDispatch } from '@/hooks/redux.hook';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
 import { useRouter } from 'next/navigation';
+import { selectNumberOfLives, selectTeamId } from '@/store/selectors/user.selector';
 
 type QuestionProps = {
     questionNumber : number
@@ -21,13 +22,15 @@ const Question = (props : QuestionProps) => {
   const {questionNumber, question, imageUrl, qrscanner, code, location } = props;
 
   const dispatch = useAppDispatch();
-  const router = useRouter()
+  const router = useRouter();
+  const teamLives = useAppSelector(selectNumberOfLives)
+  const teamId = useAppSelector(selectTeamId)
     
   return (
     <div className={styles.main__question__container}>
 
         <div>
-            Lives: 5
+            Lives: {teamLives}
         </div>
         
         <div>
@@ -57,7 +60,7 @@ const Question = (props : QuestionProps) => {
     // TODO write the logic to say if the answer is correct or not then continue
     dispatch(userActions.setProgressString(`question${questionNumber}`))
     if(questionNumber !== 6) {
-        router.push(`/question/q${questionNumber+1}`)
+        router.push(`/${teamId}/question/q${questionNumber+1}`)
     }else {
         router.push('/complete')
     }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { api } from "./query/api";
+import axios from "axios";
 
 export async function middleware(request :  NextRequest){
 
@@ -7,6 +8,8 @@ export async function middleware(request :  NextRequest){
 
     const teamId = request.nextUrl.pathname.split('/')[1]
     const questionId = request.nextUrl.pathname.split('/')[3]
+
+    console.log(request.nextUrl)
 
     const team = await api.get(`/team/${teamId}`)
     const teamData= team.data;
@@ -24,5 +27,6 @@ export async function middleware(request :  NextRequest){
 }
 
 export const config = {
-    matcher: ['/([a-zA-Z0-9_-]+)/question/q([1-6])'],
+
+    matcher: ['/((?!api).*)/question/q([1-6])'],
 }
