@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
 import React, { useActionState, useEffect, useState } from 'react'
@@ -8,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { selectCurrentQuestionNumber, selectTeamId } from '@/store/selectors/user.selector';
 import { userActions } from '@/store/slices/user.slice';
 import QRScanner from '@/components/QrScanner/QrScanner';
+import toast from 'react-hot-toast';
 
 const Scan = () => {
 
@@ -22,18 +22,10 @@ const Scan = () => {
   const handleScan = (data: string) => {
     setQRData(data);
     navigator.clipboard.writeText(data);
-    alert("code copied to clipboard")
+    toast.success('Copied to clipboard');
     dispatch(userActions.setQrCodeValue(data));
     router.push(`${teamId}/question/q${questionStage}`);
   };
-
-  // useEffect(() => {
-    
-  //   setTimeout(()=> {
-  //       dispatch(userActions.setQrCodeValue('qrvalue'));
-  //       router.push(`${teamId}/question/q${questionStage}`);
-  //   }, 2000)
-  // }, [])
     
   return (
     <div className={styles.main__container}>

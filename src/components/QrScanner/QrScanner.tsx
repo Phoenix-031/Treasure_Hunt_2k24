@@ -2,6 +2,9 @@
 import { useEffect, useRef } from 'react';
 import jsQR from 'jsqr';
 import styles from './style.module.scss';
+import toast from 'react-hot-toast';
+import { redirect } from 'next/dist/server/api-utils';
+import { useRouter } from 'next/navigation';
 
 interface QRScannerProps {
   onScan: (data: string) => void;
@@ -11,6 +14,8 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  const router = useRouter();
+  
   useEffect(() => {
     const startVideo = async () => {
       try {
@@ -20,7 +25,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan }) => {
           await videoRef.current.play();
         }
       } catch (err) {
-        console.error('Error accessing camera:', err);
+        toast.error('Failed to access camera please give permissions');
       }
     };
 

@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image';
-import React, { useEffect } from 'react'
+import React from 'react'
 import styles from './style.module.scss';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';

@@ -4,6 +4,10 @@ import { Fonts } from "@/lib/fonts";
 
 import StoreProvider from "@/store/StoreProvider";
 import QueryProvider from "@/query/QueryProvider";
+import PermissionPopupWrapper from "@/components/PermissionPopup/PermissionPopupWrapper";
+
+import {Toaster} from 'react-hot-toast';
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,6 +26,8 @@ export default function RootLayout({
           <html lang="en">
             <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
                 {children}
+                <Toaster position="top-right"/>
+                <PermissionPopupWrapper />
             </body>
           </html>
         </QueryProvider>
