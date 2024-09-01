@@ -18,7 +18,7 @@ const StartUp = () => {
   const teamId = useAppSelector(selectTeamId);
 
   const updateTeamStage = useUpdateTeam();
-  const getTeam = useGetTeamById(teamId);
+  const getTeam = useGetTeamById(teamId,true);
 
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
 

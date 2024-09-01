@@ -3,7 +3,6 @@ import { api } from ".";
 import { store } from "@/store";
 
 
-
 export const useUpdateTeam = () => {
     return useMutation({
         mutationKey: ["updateTeam"],
@@ -15,11 +14,22 @@ export const useUpdateTeam = () => {
     })
 }
 
-export const useGetTeamById = (teamId : string) => {
+export const useGetTeamById = (teamId : string, dependant : boolean) => {
     return useQuery({
         queryKey: ["team", teamId],
         queryFn: async () => {
             const res = await api.get(`/api/team/${teamId}`)
+            return res.data;
+        },
+        enabled : dependant
+    })
+}
+
+export const useVerifyAnswer = () => {
+    return useMutation({
+        mutationKey: ["verifyAnswer"],
+        mutationFn: async (data : {teamId : string, questionId : string, answerCode : string}) => {
+            const res = await api.post('/api/verify', data)
             return res.data;
         },
     })

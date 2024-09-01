@@ -7,6 +7,7 @@ interface Question_T {
     spotName : string,
     answerCode : string
 }
+
 const questionSchema = new Schema<Question_T>(
   {
     question: {
@@ -37,4 +38,5 @@ const questionSchema = new Schema<Question_T>(
 
 const QuestionModel: Model<Question_T> =
   mongoose.models.Question ?? model<Question_T>('Question', questionSchema);
+  
 export default QuestionModel;

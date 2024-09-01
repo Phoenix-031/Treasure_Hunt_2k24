@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
 import { useRouter } from 'next/navigation';
 import { selectNumberOfLives, selectQrCodeValue, selectTeamId } from '@/store/selectors/user.selector';
-import { useUpdateTeam } from '@/query/api/user.service';
+import { useGetTeamById, useUpdateTeam, useVerifyAnswer } from '@/query/api/user.service';
 
 type QuestionProps = {
     questionNumber : number
@@ -30,6 +30,8 @@ const Question = (props : QuestionProps) => {
   const numberOfLives = useAppSelector(selectNumberOfLives);
 
   const updateTeam = useUpdateTeam();
+  const verifyAnswer = useVerifyAnswer();
+  const getTeam = useGetTeamById(teamId, false);
 
   return (
     <div className={styles.main__question__container}>
@@ -73,7 +75,7 @@ const Question = (props : QuestionProps) => {
   )
 
   function handleScanQR() {
-    router.push('/scan')
+    router.push('/scan');
   }
 
   function handleCancelCode() {
@@ -82,20 +84,25 @@ const Question = (props : QuestionProps) => {
   
   async function handleSubmit() {
 
+    const res =await verifyAnswer.mutateAsync({
+        teamId : teamId,
+        questionId : `q${questionNumber}`,
+        answerCode : qrCodeValue
+    })
+
     if(teamLives === 0) {
         router.push('/dead')
     }
 
-    if(qrCodeValue !== 'qrvalue') {
-        const res = await updateTeam.mutateAsync({
-            numberOfLives : numberOfLives -1 
-        })
-        if(res) {
-            dispatch(userActions.setNumberOfLives(numberOfLives -1))
-        }
-    }else {
-        dispatch(userActions.setProgressString(`/${teamId}/question/${questionNumber}`))
+    if(!res.success) {
+        const res = await getTeam.refetch();
 
+        if(res.isSuccess) {
+            const teamData= res.data.data;
+            dispatch(userActions.setNumberOfLives(teamData.numberOfLives));
+        }
+    }
+    else {
         if(questionNumber !== 6) {
             const res = await updateTeam.mutateAsync({
                 currentQuestionStage : questionNumber+1,

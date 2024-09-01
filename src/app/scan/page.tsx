@@ -22,7 +22,9 @@ const Scan = () => {
   const handleScan = (data: string) => {
     setQRData(data);
     navigator.clipboard.writeText(data);
-    toast.success('Copied to clipboard');
+    toast.success('Copied to clipboard',{
+      duration: 1200
+    });
     dispatch(userActions.setQrCodeValue(data));
     router.push(`${teamId}/question/q${questionStage}`);
   };
