@@ -45,7 +45,7 @@ const StartUp = () => {
   return (
     <div className={styles.main__container}>
         <div className={styles.team__name}>
-            <p>Pirate #</p>
+            <p>Pirate #{teamId}</p>
             <p className={styles.name}>{teamName}</p>
         </div>
 

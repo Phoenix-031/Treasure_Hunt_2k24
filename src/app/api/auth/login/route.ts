@@ -18,14 +18,14 @@ export async function POST(req: NextRequest) {
             });
         }
 
-        const { teamId, teamName } = LoginVerified.data;
+        const { teamId, espektroId } = LoginVerified.data;
 
         const team = await TeamModel.aggregate([
-            { $match: { teamId, teamName } },
+            { $match: { teamId } },
             { $limit: 1 }
         ]);
 
-        if (team.length === 0) {
+        if (!team || team.length === 0) {
             return NextResponse.json({
                 success: false,
                 message: 'Team not found or invalid team name',
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
         const teamData = team[0];
 
-        if (teamData.isDisqualified || teamData.numberOfLives === 0) {
+        if (teamData.isDisqualified || teamData.numberOfLives === -1) {
             return NextResponse.json({
                 success: false,
                 message: 'Team is disqualified',
@@ -43,10 +43,23 @@ export async function POST(req: NextRequest) {
             });
         }
 
+        const isMember = teamData.teamMembers.find((member : {
+            name : string,
+            espektroId : string
+        }) => member.espektroId === espektroId);
+
+        if(!isMember) {
+            return NextResponse.json({
+                success: false,
+                message: 'Invalid team member or espektro Id',
+                body: { message: 'Invalid team member' },
+            });
+        }
+
         return NextResponse.json({
             message: 'Login successful',
             success: true,
-            res: teamData,
+            body:teamData,
         });
 
     } catch (error) {

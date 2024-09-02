@@ -18,6 +18,5 @@ export const teamSchema = z.object({
 
 export const LoginSchema = z.object(({
     teamId : z.string(),
-    teamName: z.string(),
     espektroId : z.string(),
 }))

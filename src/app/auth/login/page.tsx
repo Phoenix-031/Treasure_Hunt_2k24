@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamName } from '@/store/selectors/user.selector'
 import { useGetTeamById } from '@/query/api/user.service'
+import { useLoginTeam } from '@/query/api/auth.service'
 
 type UserLoginFormType = z.infer<typeof FormType.UserLoginForm>
 
@@ -18,15 +19,12 @@ const Login = () => {
    const router= useRouter();
    const dispatch = useAppDispatch();
    const teamName = useAppSelector(selectTeamName)
+   const loginTeam = useLoginTeam();
 
-  //  const [teamId, setTeamId] = useState('')
-
-  //  const getTeam = useGetTeamById(teamId);
 
    const {register,handleSubmit} = useForm({
     defaultValues:{
         teamId: '',
-        teamName: '',
         espektroId: '',
     }
    })
@@ -40,14 +38,7 @@ const Login = () => {
                 <input {...register('teamId',{
                     required:'Please enter the team id to continue'
                 })}/>
-            </div>
-            <div>
-                <label htmlFor="">TeamName</label>
-                <input {...register('teamName',{
-                    required:'Please enter the team name to continue'
-                })}/>
-            </div>
-            
+            </div>          
             <div>
                 <label htmlFor="">EspektroId</label>
                 <input {...register('espektroId',{
@@ -66,9 +57,20 @@ const Login = () => {
 
   async function onSubmitForm(data : UserLoginFormType) {
   
-    dispatch(userActions.setTeamId('team456'))
-    dispatch(userActions.setTeamName("spmeTeamName"))
-    router.push('/startup')
+    await loginTeam.mutateAsync(data, {
+        onSuccess: (res) => {
+            console.log(res, "res")
+            if(res.success) {
+                dispatch(userActions.setTeamId(res.body.teamId));
+                dispatch(userActions.setTeamName(res.body.teamName));
+                router.push('/startup')
+            }
+            console.log(res,"console")
+        },
+        onError: (err) => {
+            console.log(err)
+        }
+    }); 
   }
 }
 
