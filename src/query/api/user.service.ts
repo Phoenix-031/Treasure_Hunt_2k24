@@ -1,4 +1,4 @@
-import { useMutation, useQueries, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from ".";
 import { store } from "@/store";
 
@@ -42,5 +42,15 @@ export const useVerifyStartupAnswer = ()  => {
             const res = await api.post('/api/startup', data)
             return res.data;
         },
+    })
+}
+
+export const useGetLeaderboard = () => {
+    return useQuery({
+        queryKey: ["leaderboard"],
+        queryFn: async () => {
+            const res = await api.get('/api/leaderboard')
+            return res.data;
+        }
     })
 }

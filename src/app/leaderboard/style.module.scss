@@ -1,0 +1,42 @@
+@import '../../sass/functions';
+
+.main__container {
+    font-family: Poppins, sans-serif;
+    border: 1px solid var(--border-color);
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding: 1.5rem;
+    @include flex-container(column, flex-start, center);
+
+    &>div:nth-child(2) {
+        margin-top: 1rem;
+        width: 100%;
+        text-align: left;
+
+        &>table {
+            width: 100%;
+
+            &>tbody {
+                width: 100%;
+
+                &>tr:first-child {
+                    &>td {
+                        padding-top: 1rem;
+                    }
+                }
+
+                &>tr {
+                    border-bottom: 1px solid var(--border-color);
+
+                    &>td {
+                        padding-bottom: 1rem;
+                    }
+                }
+
+            }
+        }
+    }
+}
