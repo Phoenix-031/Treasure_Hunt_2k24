@@ -80,19 +80,21 @@ export async function POST(req : NextRequest) {
             })
         }
 
-        await TeamModel.updateOne({
+        const newTeam = await TeamModel.findOneAndUpdate({
             teamId,
         }, {
             $set: {
-                progressString: team.progressString + answerCode,
+                progressString: team.progressString + answerCode +'_',
                 currentQuestionStage: team.currentQuestionStage + 1,
             },
+        },{
+            new : true
         })
 
         return NextResponse.json({
             success : true,
             message: 'Answer code verified',
-            body: JSON.stringify({ message: "Answer code verified" }),
+            body: newTeam,
         })
 
     } catch (error) {

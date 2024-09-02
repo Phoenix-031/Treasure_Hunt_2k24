@@ -78,13 +78,16 @@ const StartUp = () => {
       answer: initialPuzzleAnswer,
     },{
       onSuccess: async(res) =>{
+
         if(res.success) {
-          const team = await getTeam.refetch();
-          const teamdata = team.data.data;
-          dispatch(userActions.setProgressString(teamdata.setProgressString))
-          dispatch(userActions.setCurrentQuestionNumber(teamdata.currentQuestionStage));
-          router.push(`${teamId}/question/q${teamdata.currentQuestionStage}`)
+          dispatch(userActions.setProgressString(res.body.setProgressString))
+          dispatch(userActions.setCurrentQuestionNumber(res.body.currentQuestionStage));
+
+          router.push(`${teamId}/question/q${res.body.currentQuestionStage}`)
           toast('Use your Lives carefully!!')
+          queryClient.invalidateQueries({
+            queryKey:['team']
+          })
         }else {
           toast.info('Try again!!')
           setIntialPuzzleAnswer('')

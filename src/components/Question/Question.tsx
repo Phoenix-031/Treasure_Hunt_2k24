@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useActionState } from 'react'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -12,6 +12,7 @@ import { useGetTeamById, useVerifyAnswer } from '@/query/api/user.service';
 import styles from './style.module.scss';
 
 import { handleZodError } from '@/error/handleZodError';
+import { useQueryClient } from '@tanstack/react-query';
 
 type QuestionProps = {
     questionNumber : number
@@ -26,6 +27,7 @@ const Question = (props : QuestionProps) => {
 
   const {questionNumber, question, imageUrl, qrscanner } = props;
 
+  const queryClient = useQueryClient()
   const dispatch = useAppDispatch();
   const router = useRouter();
   const teamLives = useAppSelector(selectNumberOfLives)
@@ -93,20 +95,19 @@ const Question = (props : QuestionProps) => {
     },
      {
         onSuccess: async(res) =>{
-            const team = await getTeam.refetch();
-            const teamData = team.data.data;
-
             if(!res.success){
                 res.zodErrorBody ? handleZodError(res.zodErrorBody) : (
                     toast.error(res.message)
                 )
-                if(team.isSuccess) {
-                    dispatch(userActions.setNumberOfLives(teamData.numberOfLives));
-                }
+            dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
             }else{
-                dispatch(userActions.setNumberOfLives(teamData.numberOfLives));
-                router.push(`/${teamId}/question/q${teamData.currentQuestionStage}`)
+                dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
+                dispatch(userActions.setCurrentQuestionNumber(res.body.currentQuestionStage));
+                router.push(`/${teamId}/question/q${res.body.currentQuestionStage}`)
             }
+            queryClient.invalidateQueries({
+                queryKey: ['team']
+            })
         },
         onError: (err) => {
             console.log(err.message)
