@@ -101,9 +101,14 @@ const Question = (props : QuestionProps) => {
                 )
             dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
             }else{
+                if(res.body.currentQuestionStage === -1) {
+                    toast.success('Congrats! The hunt is complete')
+                    router.push('/complete')
+                }else {
+                    router.push(`/${teamId}/question/q${res.body.currentQuestionStage}`)
+                }
                 dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
                 dispatch(userActions.setCurrentQuestionNumber(res.body.currentQuestionStage));
-                router.push(`/${teamId}/question/q${res.body.currentQuestionStage}`)
             }
             queryClient.invalidateQueries({
                 queryKey: ['team']

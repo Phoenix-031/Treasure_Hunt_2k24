@@ -11,7 +11,7 @@ const VerifySchema = z.object({
     questionId : z.string().max(10,{
         message: 'Question id must be a string with maximum length of 10'
     }),
-    answerCode : z.string().max(7, {
+    answerCode : z.string().max(10, {
         message: 'Answer code must be a string with maximum length of 7'
     }),
 })
@@ -80,12 +80,14 @@ export async function POST(req : NextRequest) {
             })
         }
 
+        const totalQuestions = await QuestionModel.countDocuments();
+        
         const newTeam = await TeamModel.findOneAndUpdate({
             teamId,
         }, {
             $set: {
                 progressString: team.progressString + answerCode +'_',
-                currentQuestionStage: team.currentQuestionStage + 1,
+                currentQuestionStage: team.currentQuestionStage + 1 > totalQuestions ? -1 : team.currentQuestionStage + 1,
             },
         },{
             new : true
