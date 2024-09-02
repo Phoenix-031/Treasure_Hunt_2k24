@@ -14,14 +14,14 @@ export const useUpdateTeam = () => {
     })
 }
 
-export const useGetTeamById = (teamId : string, dependant : boolean) => {
+export const useGetTeamById = (teamId : string) => {
     return useQuery({
         queryKey: ["team", teamId],
         queryFn: async () => {
             const res = await api.get(`/api/team/${teamId}`)
             return res.data;
         },
-        enabled : dependant
+        enabled : false,
     })
 }
 

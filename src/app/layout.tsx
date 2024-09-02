@@ -6,7 +6,7 @@ import StoreProvider from "@/store/StoreProvider";
 import QueryProvider from "@/query/QueryProvider";
 import PermissionPopupWrapper from "@/components/PermissionPopup/PermissionPopupWrapper";
 
-import {Toaster} from 'react-hot-toast';
+import { Toaster } from "sonner";
 
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default function RootLayout({
           <html lang="en">
             <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
                 {children}
-                <Toaster position="top-right"/>
+                <Toaster position="top-right" richColors/>
                 <PermissionPopupWrapper />
             </body>
           </html>

@@ -18,7 +18,8 @@ const StartUp = () => {
   const teamId = useAppSelector(selectTeamId);
 
   const updateTeamStage = useUpdateTeam();
-  const getTeam = useGetTeamById(teamId,true);
+  const getTeam = useGetTeamById(teamId);
+  getTeam.refetch();
 
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
 
@@ -50,7 +51,6 @@ const StartUp = () => {
   )
 
   async function handleStartHunt() {
-    // TODO : add logic that if the provided puzzle answer is correct then it would get the user to the first question and continue the game
 
     if(initialPuzzleAnswer === 'Secret') {
 

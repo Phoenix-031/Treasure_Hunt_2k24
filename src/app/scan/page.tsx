@@ -7,7 +7,10 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { selectCurrentQuestionNumber, selectTeamId } from '@/store/selectors/user.selector';
 import { userActions } from '@/store/slices/user.slice';
 import QRScanner from '@/components/QrScanner/QrScanner';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
+const dataValidator = z.string().min(7)
 
 const Scan = () => {
 
@@ -21,12 +24,17 @@ const Scan = () => {
 
   const handleScan = (data: string) => {
     setQRData(data);
+
+    const dataValidated = dataValidator.safeParse(data);
+
+    if(data && dataValidated.success)
     navigator.clipboard.writeText(data);
     toast.success('Copied to clipboard',{
       duration: 1200
     });
     dispatch(userActions.setQrCodeValue(data));
     router.push(`${teamId}/question/q${questionStage}`);
+    return;
   };
     
   return (

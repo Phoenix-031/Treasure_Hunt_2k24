@@ -11,48 +11,54 @@ type TeamBodyType = z.infer<typeof teamSchema>
 export async function POST(req: NextRequest) {
     const body :  TeamBodyType= await req.json();
 
-    const { success, data } = teamSchema.safeParse(body);
-    const memberParse = memberSchema.safeParse(body.teamMembers[0])
+    const teamVerified = teamSchema.safeParse(body);
 
-    if (!success) {
+    const membersVerified = body.teamMembers.every(member => memberSchema.safeParse(member).success);
+
+    if (!membersVerified) {
         return NextResponse.json({
-            message: 'Invalid data',
+            status: 400,
+            success: false,
+            message: 'One or more team members have invalid data',
+            body: JSON.stringify({ message: 'Invalid team members' }),
         });
-    }else if(!memberParse.success) {
-        return  NextResponse.json({
-            message :'Invaid member data provided'
-        })
     }
 
-    if (!success) {
+    if (!teamVerified.success) {
         return NextResponse.json({
-            message: 'Invalid data',
+            status: 400,
+            success: false,
+            message: 'Invalid team data provided',
+            body: JSON.stringify({ message: 'Invalid team members' }),
         });
-    }else if(!memberParse.success) {
-        return  NextResponse.json({
-            message :'Invaid member data provided'
-        })
     }
-
+    
     try {
         await connectDB();
+
+        const teamData = teamVerified.data;
+
         const res = await TeamModel.create({
-            teamName: data.teamName,
-            teamId: data.teamId,
-            numberOfLives: data.numberOfLives,
-            progressString: data.progressString,
-            validationString: data.validationString,
-            currentQuestionStage: data.currentQuestionStage,
-            isDisqualified: data.isDisqualified,
-            teamMembers: data.teamMembers,
+            teamName: teamData.teamName,
+            teamId: teamData.teamId,
+            numberOfLives: teamData.numberOfLives,
+            progressString: teamData.progressString,
+            validationString: teamData.validationString,
+            currentQuestionStage: teamData.currentQuestionStage,
+            isDisqualified: teamData.isDisqualified,
+            teamMembers: teamData.teamMembers,
         });
 
         return NextResponse.json({
             message: 'Team created successfully',
+            success : true,
+            status:200,
             result: res,
         });
     } catch (error) {
         return NextResponse.json({
+            success :false,
+            status : 500,
             message: 'An error occurred while processing your request.',
             description: JSON.stringify(error),
         });

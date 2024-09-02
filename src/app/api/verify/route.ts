@@ -5,9 +5,15 @@ import TeamModel from "../_model/team.model";
 import QuestionModel from "../_model/question.model";
 
 const VerifySchema = z.object({
-    teamId : z.string(),
-    questionId : z.string(),
-    answerCode : z.string(),
+    teamId : z.string({
+        message: 'Team id must be a string'
+    }),
+    questionId : z.string().max(10,{
+        message: 'Question id must be a string with maximum length of 10'
+    }),
+    answerCode : z.string().max(7, {
+        message: 'Answer code must be a string with maximum length of 7'
+    }),
 })
 
 export async function POST(req : NextRequest) {
@@ -52,7 +58,7 @@ export async function POST(req : NextRequest) {
         }
 
         const question = await QuestionModel.findOne({
-            questionId: questionId,
+            questionId
         })
 
         if(!question) {
@@ -65,13 +71,10 @@ export async function POST(req : NextRequest) {
         }
 
         if(question.answerCode !== answerCode) {
-            await TeamModel.updateOne({
-                teamId: teamId,
-            }, {
-                $set: {
-                    numberOfLives: team.numberOfLives - 1,
-                }
-            })
+            await TeamModel.updateOne(
+                { teamId },
+                { $inc: { numberOfLives: -1 } }
+            );
 
             return NextResponse.json({
                 status: 400,
@@ -82,7 +85,7 @@ export async function POST(req : NextRequest) {
         }
 
         await TeamModel.updateOne({
-            teamId: teamId,
+            teamId,
         }, {
             $set: {
                 progressString: team.progressString + answerCode,

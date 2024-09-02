@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       message: 'fetched all questions',
+      success : true,
       data : result,
     });
   } catch (error) {

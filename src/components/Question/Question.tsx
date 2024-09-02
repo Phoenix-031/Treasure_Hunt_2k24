@@ -31,7 +31,7 @@ const Question = (props : QuestionProps) => {
 
   const updateTeam = useUpdateTeam();
   const verifyAnswer = useVerifyAnswer();
-  const getTeam = useGetTeamById(teamId, false);
+  const getTeam = useGetTeamById(teamId);
 
   return (
     <div className={styles.main__question__container}>

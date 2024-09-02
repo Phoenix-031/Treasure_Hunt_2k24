@@ -2,9 +2,7 @@
 import { useEffect, useRef } from 'react';
 import jsQR from 'jsqr';
 import styles from './style.module.scss';
-import toast from 'react-hot-toast';
-import { redirect } from 'next/dist/server/api-utils';
-import { useRouter } from 'next/navigation';
+import {toast} from 'sonner';
 
 interface QRScannerProps {
   onScan: (data: string) => void;
@@ -13,8 +11,6 @@ interface QRScannerProps {
 const QRScanner: React.FC<QRScannerProps> = ({ onScan }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  const router = useRouter();
   
   useEffect(() => {
     const startVideo = async () => {
@@ -30,6 +26,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan }) => {
     };
 
     startVideo();
+
   }, []);
 
   useEffect(() => {
@@ -48,6 +45,7 @@ const QRScanner: React.FC<QRScannerProps> = ({ onScan }) => {
 
           if (code) {
             onScan(code.data);
+            return;
           }
         }
       }
