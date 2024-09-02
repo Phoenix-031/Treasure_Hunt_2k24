@@ -68,7 +68,9 @@ async function startGame() {
       router.push('/startup');
     } else if (teamData.currentQuestionStage === -1) {
       router.push('/complete');
-    } else {
+    }else if(teamData.isDisqualified || teamData.numberOfLives === -1){
+      router.push('/dead');
+    }else {
       router.push(`/${teamId}/question/q${teamData.currentQuestionStage}`);
     }
   }
