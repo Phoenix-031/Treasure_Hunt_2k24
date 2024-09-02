@@ -77,13 +77,13 @@ const StartUp = () => {
       teamId : teamId,
       answer: initialPuzzleAnswer,
     },{
-      onSuccess: (res) =>{
+      onSuccess: async(res) =>{
         if(res.success) {
-          queryClient.invalidateQueries({queryKey : ['team']})
-          const team = getTeam.data.data;
-          dispatch(userActions.setProgressString(team.setProgressString))
-          dispatch(userActions.setCurrentQuestionNumber(team.currentQuestionStage));
-          router.push(`${teamId}/question/q${team.currentQuestionStage}`)
+          const team = await getTeam.refetch();
+          const teamdata = team.data.data;
+          dispatch(userActions.setProgressString(teamdata.setProgressString))
+          dispatch(userActions.setCurrentQuestionNumber(teamdata.currentQuestionStage));
+          router.push(`${teamId}/question/q${teamdata.currentQuestionStage}`)
           toast('Use your Lives carefully!!')
         }else {
           toast.info('Try again!!')

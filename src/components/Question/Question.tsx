@@ -4,7 +4,6 @@ import React from 'react'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
 import { selectNumberOfLives, selectQrCodeValue, selectTeamId } from '@/store/selectors/user.selector';
@@ -27,7 +26,6 @@ const Question = (props : QuestionProps) => {
 
   const {questionNumber, question, imageUrl, qrscanner } = props;
 
-  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const teamLives = useAppSelector(selectNumberOfLives)
@@ -95,16 +93,14 @@ const Question = (props : QuestionProps) => {
     },
      {
         onSuccess: async(res) =>{
-            await queryClient.invalidateQueries({
-                queryKey:['team']
-            })
-            const teamData = getTeam.data?.data;
+            const team = await getTeam.refetch();
+            const teamData = team.data.data;
 
             if(!res.success){
                 res.zodErrorBody ? handleZodError(res.zodErrorBody) : (
                     toast.error(res.message)
                 )
-                if(getTeam.data) {
+                if(team.isSuccess) {
                     dispatch(userActions.setNumberOfLives(teamData.numberOfLives));
                 }
             }else{

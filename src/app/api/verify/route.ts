@@ -3,7 +3,6 @@ import connectDB from "../_config/connectDb"
 import { z } from "zod";
 import TeamModel from "../_model/team.model";
 import QuestionModel from "../_model/question.model";
-import { verify } from "crypto";
 
 const VerifySchema = z.object({
     teamId : z.string({
