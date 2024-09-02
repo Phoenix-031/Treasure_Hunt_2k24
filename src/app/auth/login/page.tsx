@@ -59,11 +59,14 @@ const Login = () => {
   
     await loginTeam.mutateAsync(data, {
         onSuccess: (res) => {
-            console.log(res, "res")
             if(res.success) {
                 dispatch(userActions.setTeamId(res.body.teamId));
                 dispatch(userActions.setTeamName(res.body.teamName));
-                router.push('/startup')
+                if(res.body.currentQuestionStage === 0) {
+                    router.push('/startup');
+                }else {
+                    router.push(`/${res.body.teamId}/question/q${res.body.currentQuestionStage}`);
+                }
             }
             console.log(res,"console")
         },
