@@ -1,13 +1,14 @@
 'use client'
 
-import Image from 'next/image';
 import React from 'react'
-import styles from './style.module.scss';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
-import { useRouter } from 'next/navigation';
 import { selectNumberOfLives, selectQrCodeValue, selectTeamId } from '@/store/selectors/user.selector';
 import { useGetTeamById, useUpdateTeam, useVerifyAnswer } from '@/query/api/user.service';
+
+import styles from './style.module.scss';
 
 type QuestionProps = {
     questionNumber : number
@@ -20,14 +21,13 @@ type QuestionProps = {
 
 const Question = (props : QuestionProps) => {
 
-  const {questionNumber, question, imageUrl, qrscanner, code, location } = props;
+  const {questionNumber, question, imageUrl, qrscanner } = props;
 
   const dispatch = useAppDispatch();
   const router = useRouter();
   const teamLives = useAppSelector(selectNumberOfLives)
   const teamId = useAppSelector(selectTeamId)
   const qrCodeValue = useAppSelector(selectQrCodeValue)
-  const numberOfLives = useAppSelector(selectNumberOfLives);
 
   const updateTeam = useUpdateTeam();
   const verifyAnswer = useVerifyAnswer();
@@ -84,10 +84,19 @@ const Question = (props : QuestionProps) => {
   
   async function handleSubmit() {
 
-    const res =await verifyAnswer.mutateAsync({
+    const res = await verifyAnswer.mutateAsync({
         teamId : teamId,
         questionId : `q${questionNumber}`,
         answerCode : qrCodeValue
+    }, {
+        onSuccess: (res) =>{
+            if(res.success) {
+                dispatch(userActions.setProgressString(`q${questionNumber}_`))
+            }
+        },
+        onError: (err) => {
+            console.error(err.name);
+        }
     })
 
     if(teamLives === 0) {
