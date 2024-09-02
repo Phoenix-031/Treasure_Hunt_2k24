@@ -1,6 +1,5 @@
 'use client'
-import React, { useEffect } from 'react'
-import Link from 'next/link';
+import React from 'react'
 import Image from 'next/image';
 
 import styles from './style.module.scss'
@@ -12,7 +11,6 @@ import InstallPWAButton from '@/components/InstallPWAButton/InstallPWAButton'
 import { useAppSelector } from '@/hooks/redux.hook';
 import { selectTeamId } from '@/store/selectors/user.selector';
 import { useGetTeamById } from '@/query/api/user.service';
-import { redirect } from 'next/dist/server/api-utils';
 import { useRouter } from 'next/navigation';
 import FetchingLoader from '@/components/FetchingLoader/FetchingLoader';
 
@@ -58,21 +56,24 @@ const Home = () => {
     </div>
   )
 
-  async function startGame() {
-    await getTeam.refetch();
+async function startGame() {
+  const { data, isSuccess } = await getTeam.refetch();
 
-    if(getTeam.isSuccess && getTeam.data) {
-      const teamData = getTeam.data.data;
+  if (isSuccess && data) {
+    console.log(data);
 
-      if(teamData.currentQuestionStage === 0) {
-        router.push('/startup')
-      }else if(teamData.currentQuestionStage === -1){
-        router.push('/complete')
-      }else {
-        router.push(`/${teamId}/question/q${teamData.currentQuestionStage}`)
-      }
+    const teamData = data.data;
+
+    if (teamData.currentQuestionStage === 0) {
+      router.push('/startup');
+    } else if (teamData.currentQuestionStage === -1) {
+      router.push('/complete');
+    } else {
+      router.push(`/${teamId}/question/q${teamData.currentQuestionStage}`);
     }
   }
+}
+
 }
 
 export default Home
