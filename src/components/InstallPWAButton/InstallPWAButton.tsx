@@ -1,41 +1,59 @@
-'use client';
-
-import React, { useEffect, useState } from 'react'
-
+'use client'
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>;
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
 };
 
-const InstallPWAButton = () => {
+import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-  const  [prompt, setPrompt] = useState<BeforeInstallPromptEvent | null>(null)
+const InstallPWAButton: React.FC = () => {
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [visible, setVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    window.addEventListener('beforeinstallprompt', (e : Event) => {
-        e.preventDefault()
+    const handleBeforeInstallPrompt = (event: BeforeInstallPromptEvent) => {
+      event.preventDefault();
+      setDeferredPrompt(event);
+      setVisible(true);
+    };
 
-        setPrompt(e as BeforeInstallPromptEvent)
+    const handleAppInstalled = () => {
+      setDeferredPrompt(null);
+      setVisible(false);
+      toast.success('Treasure Hunt installed successfully!')
+    };
 
-        if(!window.matchMedia('(display-mode: standalone)').matches) {
-            console.log('The app is not installed')
-        }
-    })
-  }, [])
-    
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
+    window.addEventListener('appinstalled', handleAppInstalled as EventListener);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
+      window.removeEventListener('appinstalled', handleAppInstalled as EventListener);
+    };
+  }, []);
+
+  if (!visible) return null;
+
   return (
     <div className='border-[1px] border-gray-400 max-w-max rounded-lg'>
-        <button className='p-2' onClick={handleClick}>
-            Install App
+        <button className='p-2' onClick={handleInstallClick}>
+            Install TH-KGEC
         </button>
     </div>
-  )
+  );
 
-  function handleClick() {
-    if(prompt) {
-        prompt.prompt()
+  function handleInstallClick(){
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          toast.info("Treasure Hunt installing...")
+        }
+        setDeferredPrompt(null);
+      });
     }
-  }
-}
+  };
+};
 
-export default InstallPWAButton
+export default InstallPWAButton;
