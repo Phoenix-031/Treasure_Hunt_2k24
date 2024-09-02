@@ -6,7 +6,7 @@ import { redirect, useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamId, selectTeamName } from '@/store/selectors/user.selector'
-import { useGetTeamById, useUpdateTeam, useVerifyStartupAnswer } from '@/query/api/user.service'
+import { useGetTeamById, useVerifyStartupAnswer } from '@/query/api/user.service'
 
 import styles from './style.module.scss'
 
@@ -23,7 +23,6 @@ const StartUp = () => {
   const teamName=useAppSelector(selectTeamName);
   const teamId = useAppSelector(selectTeamId);
 
-  const updateTeamStage = useUpdateTeam();
   const getTeam = useGetTeamById(teamId);
   const verifyStartupAnswer = useVerifyStartupAnswer();
 
