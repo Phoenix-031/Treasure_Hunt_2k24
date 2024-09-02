@@ -19,15 +19,15 @@ const StartUp = () => {
 
   const updateTeamStage = useUpdateTeam();
   const getTeam = useGetTeamById(teamId);
-  getTeam.refetch();
 
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
 
   useEffect(() => {
-    if(!getTeam.isLoading){
+    getTeam.refetch();
+    if(!getTeam.isLoading && getTeam.data){
       if(getTeam.data.data.isDisqualified) redirect('/dead')
     }
-  }, [getTeam.isLoading, getTeam.data])
+  }, [getTeam.isLoading, getTeam.data, getTeam])
 
     
   return (

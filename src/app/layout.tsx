@@ -21,16 +21,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <StoreProvider>
-        <QueryProvider>
-          <html lang="en">
-            <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
-                {children}
-                <Toaster position="top-right" richColors/>
-                <PermissionPopupWrapper />
-            </body>
-          </html>
-        </QueryProvider>
-    </StoreProvider>
+    <html lang="en">
+      <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
+        <StoreProvider>
+          <QueryProvider>
+            {children}
+            <Toaster position="top-right" richColors/>
+            {/* <PermissionPopupWrapper /> */}
+          </QueryProvider>
+        </StoreProvider>
+
+      </body>
+    </html>
   );
 }

@@ -31,11 +31,11 @@ const Home = () => {
         </div>
         <div className='flex justify-center items-center gap-10'>
           <div className='flex flex-col justify-center items-center'>
-            <Image src={techtixImg} alt='Techtix' height={45} width={45} className='rounded-full'/>
+            <Image src={techtixImg} alt='Techtix' height={45} className='rounded-full'/>
             <p>Techtix</p>
           </div>
           <div className='flex flex-col justify-center items-center'>
-            <Image src={infinitioImg} alt='Infinitio' height={45} width={45} className='rounded-full' />
+            <Image src={infinitioImg} alt='Infinitio' height={45} className='rounded-full' />
             <p>Infinitio</p>
           </div>
         </div>
