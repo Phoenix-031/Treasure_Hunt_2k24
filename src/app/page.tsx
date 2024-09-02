@@ -1,13 +1,15 @@
 'use client'
-
-import InstallPWAButton from '@/components/InstallPWAButton/InstallPWAButton'
 import React from 'react'
-import styles from './style.module.scss'
+import Link from 'next/link';
 import Image from 'next/image';
+
+import styles from './style.module.scss'
 
 import techtixImg from '@/assets/images/techtix.jpeg';
 import infinitioImg from'@/assets/images/infinitio.jpeg';
-import Link from 'next/link';
+
+import InstallPWAButton from '@/components/InstallPWAButton/InstallPWAButton'
+
 
 const Home = () => {
   return (
@@ -40,7 +42,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-
     </div>
   )
 }

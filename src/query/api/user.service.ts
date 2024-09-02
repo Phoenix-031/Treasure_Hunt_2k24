@@ -34,3 +34,13 @@ export const useVerifyAnswer = () => {
         },
     })
 }
+
+export const useVerifyStartupAnswer = ()  => {
+    return useMutation({
+        mutationKey: ["verifyStartupAnswer"],
+        mutationFn: async (data : {answer :string, teamId: string}) => {
+            const res = await api.post('/api/startup', data)
+            return res.data;
+        },
+    })
+}

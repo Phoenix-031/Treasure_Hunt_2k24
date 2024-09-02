@@ -21,7 +21,6 @@ const InstallPWAButton: React.FC = () => {
     const handleAppInstalled = () => {
       setDeferredPrompt(null);
       setVisible(false);
-      toast.success('Treasure Hunt installed successfully!')
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);

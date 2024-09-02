@@ -1,24 +1,31 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import styles from './style.module.scss'
 import { redirect, useRouter } from 'next/navigation'
-import { localStorageUtil } from '@/utils/localStorage.util'
+
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamId, selectTeamName } from '@/store/selectors/user.selector'
-import { useGetTeamById, useUpdateTeam } from '@/query/api/user.service'
+import { useGetTeamById, useUpdateTeam, useVerifyStartupAnswer } from '@/query/api/user.service'
+
+import styles from './style.module.scss'
+
 import { NumberOfLives } from '@/constants/constant'
+import FetchingLoader from '@/components/FetchingLoader/FetchingLoader'
+import { toast } from 'sonner'
+
 
 const StartUp = () => {
 
   const router = useRouter();
+
   const dispatch = useAppDispatch();
   const teamName=useAppSelector(selectTeamName);
   const teamId = useAppSelector(selectTeamId);
 
   const updateTeamStage = useUpdateTeam();
   const getTeam = useGetTeamById(teamId);
+  const verifyStartupAnswer = useVerifyStartupAnswer();
 
   const [initialPuzzleAnswer, setIntialPuzzleAnswer] = React.useState<string>('');
 
@@ -44,7 +51,11 @@ const StartUp = () => {
         
             <div className={styles.answer__container}>
                 <input type="text" placeholder="We r rooting for U" value={initialPuzzleAnswer} onChange={(e) => setIntialPuzzleAnswer(e.target.value) }/>
-                <button onClick={handleStartHunt}>Start Hunt</button>
+                {
+                  verifyStartupAnswer.isPending ? <FetchingLoader /> : (
+                    <button onClick={handleStartHunt}>Start Hunt</button>
+                  )
+                }
             </div>
         </div>
     </div>
@@ -52,21 +63,31 @@ const StartUp = () => {
 
   async function handleStartHunt() {
 
-    if(initialPuzzleAnswer === 'Secret') {
+    if(initialPuzzleAnswer.length === 0) {
+      toast.info('Field cannot be empty');
+      return;
+    }
 
-        const res = await updateTeamStage.mutateAsync({
-          currentQuestionStage : 1,
-        })
-
-
-        if(res) {
+    await verifyStartupAnswer.mutateAsync({
+      teamId : teamId,
+      answer: initialPuzzleAnswer,
+    },{
+      onSuccess: (res) =>{
+        if(res.success) {
           dispatch(userActions.setProgressString('puzzlesol_'))
           dispatch(userActions.setCurrentQuestionNumber(1));
           dispatch(userActions.setNumberOfLives(NumberOfLives));
+          router.push(`${teamId}/question/q1`)
+        }else {
+          toast.info('Try again!!')
+          setIntialPuzzleAnswer('')
         }
-
-        router.push(`${teamId}/question/q1`)
-    }
+      },
+      onError:() => {
+        toast.error('Something went wrong!!')
+        setIntialPuzzleAnswer('')
+      }
+    })
   }
 }
 
