@@ -12,6 +12,7 @@ interface Team_T {
     progressString : string,
     validationString : string,
     currentQuestionStage : number,
+    lastStageUpdate : Date,
     isDisqualified : boolean,
     teamMembers : Member_T[]
 }
@@ -42,6 +43,10 @@ const teamSchema = new Schema<Team_T>(
     currentQuestionStage: {
         type: Number,
         default: 0,
+    },
+    lastStageUpdate:{
+        type : Date,
+        default: Date.now,
     },
     isDisqualified: {
         type: Boolean,
