@@ -21,7 +21,7 @@ const Home = () => {
         </div>
         <div>
           <div>
-            <p><Link href='/auth/login'>Lets get going</Link></p>
+            <button><Link href='/auth/login'>Lets get going</Link></button>
           </div>
         </div>
       </div>
