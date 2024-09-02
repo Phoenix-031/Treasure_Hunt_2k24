@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import { redirect, useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
@@ -40,7 +40,6 @@ const StartUp = () => {
       dispatch(userActions.setNumberOfLives(teamData.numberOfLives));
     }
   }, [getTeam.isLoading, getTeam.data, getTeam, dispatch])
-
     
   return (
     <div className={styles.main__container}>

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -9,9 +9,20 @@ import techtixImg from '@/assets/images/techtix.jpeg';
 import infinitioImg from'@/assets/images/infinitio.jpeg';
 
 import InstallPWAButton from '@/components/InstallPWAButton/InstallPWAButton'
+import { useAppSelector } from '@/hooks/redux.hook';
+import { selectTeamId } from '@/store/selectors/user.selector';
+import { useGetTeamById } from '@/query/api/user.service';
+import { redirect } from 'next/dist/server/api-utils';
+import { useRouter } from 'next/navigation';
+import FetchingLoader from '@/components/FetchingLoader/FetchingLoader';
 
 
 const Home = () => {
+
+  const router = useRouter();
+  const teamId = useAppSelector(selectTeamId);
+  const getTeam = useGetTeamById(teamId);
+
   return (
     <div className={styles.main__container}>
       <div className='flex justify-center items-center'>
@@ -23,7 +34,9 @@ const Home = () => {
         </div>
         <div>
           <div>
-            <button><Link href='/auth/login'>Lets get going</Link></button>
+            {
+              getTeam.isLoading ? <FetchingLoader  /> : (<button onClick={startGame}>Lets get going</button>)
+            }
           </div>
         </div>
       </div>
@@ -44,6 +57,22 @@ const Home = () => {
       </div>
     </div>
   )
+
+  async function startGame() {
+    await getTeam.refetch();
+
+    if(getTeam.isSuccess && getTeam.data) {
+      const teamData = getTeam.data.data;
+
+      if(teamData.currentQuestionStage === 0) {
+        router.push('/startup')
+      }else if(teamData.currentQuestionStage === -1){
+        router.push('/complete')
+      }else {
+        router.push(`/${teamId}/question/q${teamData.currentQuestionStage}`)
+      }
+    }
+  }
 }
 
 export default Home

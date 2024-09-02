@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation'
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamName } from '@/store/selectors/user.selector'
-import { useGetTeamById } from '@/query/api/user.service'
 import { useLoginTeam } from '@/query/api/auth.service'
 
 type UserLoginFormType = z.infer<typeof FormType.UserLoginForm>
@@ -68,7 +67,6 @@ const Login = () => {
                     router.push(`/${res.body.teamId}/question/q${res.body.currentQuestionStage}`);
                 }
             }
-            console.log(res,"console")
         },
         onError: (err) => {
             console.log(err)
