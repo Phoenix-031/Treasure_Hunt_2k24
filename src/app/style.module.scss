@@ -46,6 +46,7 @@
                 width: 85%;
                 text-align: center;
                 font-size: 1.2rem;
+                @include flex-container(row, center, center);
 
                 &>button {
                     width: 100%;
