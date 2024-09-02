@@ -10,14 +10,15 @@ import { useGetTeamById, useVerifyStartupAnswer } from '@/query/api/user.service
 
 import styles from './style.module.scss'
 
-import { NumberOfLives } from '@/constants/constant'
 import FetchingLoader from '@/components/FetchingLoader/FetchingLoader'
 import { toast } from 'sonner'
+import { useQueryClient } from '@tanstack/react-query'
 
 
 const StartUp = () => {
 
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const dispatch = useAppDispatch();
   const teamName=useAppSelector(selectTeamName);
@@ -33,7 +34,12 @@ const StartUp = () => {
     if(!getTeam.isLoading && getTeam.data){
       if(getTeam.data.data.isDisqualified) redirect('/dead')
     }
-  }, [getTeam.isLoading, getTeam.data, getTeam])
+
+    if(getTeam.data){
+      const teamData= getTeam.data?.data;
+      dispatch(userActions.setNumberOfLives(teamData.numberOfLives));
+    }
+  }, [getTeam.isLoading, getTeam.data, getTeam, dispatch])
 
     
   return (
@@ -73,10 +79,12 @@ const StartUp = () => {
     },{
       onSuccess: (res) =>{
         if(res.success) {
-          dispatch(userActions.setProgressString('puzzlesol_'))
-          dispatch(userActions.setCurrentQuestionNumber(1));
-          dispatch(userActions.setNumberOfLives(NumberOfLives));
-          router.push(`${teamId}/question/q1`)
+          queryClient.invalidateQueries({queryKey : ['team']})
+          const team = getTeam.data.data;
+          dispatch(userActions.setProgressString(team.setProgressString))
+          dispatch(userActions.setCurrentQuestionNumber(team.currentQuestionStage));
+          router.push(`${teamId}/question/q${team.currentQuestionStage}`)
+          toast('Use your Lives carefully!!')
         }else {
           toast.info('Try again!!')
           setIntialPuzzleAnswer('')

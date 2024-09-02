@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
 
     if (!membersVerified) {
         return NextResponse.json({
-            status: 400,
             success: false,
             message: 'One or more team members have invalid data',
             body: JSON.stringify({ message: 'Invalid team members' }),
@@ -26,7 +25,6 @@ export async function POST(req: NextRequest) {
 
     if (!teamVerified.success) {
         return NextResponse.json({
-            status: 400,
             success: false,
             message: 'Invalid team data provided',
             body: JSON.stringify({ message: 'Invalid team members' }),
@@ -52,13 +50,11 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({
             message: 'Team created successfully',
             success : true,
-            status:200,
             result: res,
         });
     } catch (error) {
         return NextResponse.json({
             success :false,
-            status : 500,
             message: 'An error occurred while processing your request.',
             description: JSON.stringify(error),
         });

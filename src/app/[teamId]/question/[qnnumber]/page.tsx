@@ -1,10 +1,13 @@
 'use client'
 
-import Loader from '@/components/Loader/Loader'
-import { useGetQuestion } from '@/query/api/question.service'
 import React from 'react'
-import styles from './style.module.scss'
 import Question from '@/components/Question/Question'
+import { useGetQuestion } from '@/query/api/question.service'
+
+import Loader from '@/components/Loader/Loader'
+
+import styles from './style.module.scss'
+
 
 type PageType = {
     params: {

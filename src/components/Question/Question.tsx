@@ -3,12 +3,16 @@
 import React from 'react'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
 import { selectNumberOfLives, selectQrCodeValue, selectTeamId } from '@/store/selectors/user.selector';
-import { useGetTeamById, useUpdateTeam, useVerifyAnswer } from '@/query/api/user.service';
+import { useGetTeamById, useVerifyAnswer } from '@/query/api/user.service';
 
 import styles from './style.module.scss';
+
+import { handleZodError } from '@/error/handleZodError';
 
 type QuestionProps = {
     questionNumber : number
@@ -23,13 +27,13 @@ const Question = (props : QuestionProps) => {
 
   const {questionNumber, question, imageUrl, qrscanner } = props;
 
+  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
   const router = useRouter();
   const teamLives = useAppSelector(selectNumberOfLives)
   const teamId = useAppSelector(selectTeamId)
   const qrCodeValue = useAppSelector(selectQrCodeValue)
 
-  const updateTeam = useUpdateTeam();
   const verifyAnswer = useVerifyAnswer();
   const getTeam = useGetTeamById(teamId);
 
@@ -84,46 +88,34 @@ const Question = (props : QuestionProps) => {
   
   async function handleSubmit() {
 
-    const res = await verifyAnswer.mutateAsync({
+    await verifyAnswer.mutateAsync({
         teamId : teamId,
         questionId : `q${questionNumber}`,
         answerCode : qrCodeValue
-    }, {
-        onSuccess: (res) =>{
-            if(res.success) {
-                dispatch(userActions.setProgressString(`q${questionNumber}_`))
+    },
+     {
+        onSuccess: async(res) =>{
+            await queryClient.invalidateQueries({
+                queryKey:['team']
+            })
+            const teamData = getTeam.data?.data;
+
+            if(!res.success){
+                res.zodErrorBody ? handleZodError(res.zodErrorBody) : (
+                    toast.error(res.message)
+                )
+                if(getTeam.data) {
+                    dispatch(userActions.setNumberOfLives(teamData.numberOfLives));
+                }
+            }else{
+                dispatch(userActions.setNumberOfLives(teamData.numberOfLives));
+                router.push(`/${teamId}/question/q${teamData.currentQuestionStage}`)
             }
         },
         onError: (err) => {
-            console.error(err.name);
+            console.log(err.message)
         }
     })
-
-    if(teamLives === 0) {
-        router.push('/dead')
-    }
-
-    if(!res.success) {
-        const res = await getTeam.refetch();
-
-        if(res.isSuccess) {
-            const teamData= res.data.data;
-            dispatch(userActions.setNumberOfLives(teamData.numberOfLives));
-        }
-    }
-    else {
-        if(questionNumber !== 6) {
-            const res = await updateTeam.mutateAsync({
-                currentQuestionStage : questionNumber+1,
-            })
-            if(res){
-                dispatch(userActions.setCurrentQuestionNumber(questionNumber+1))
-                router.push(`/${teamId}/question/q${questionNumber+1}`)
-            }
-        }else {
-            router.push('/complete')
-        }
-    }
     dispatch(userActions.setQrCodeValue(''))
   }
 }

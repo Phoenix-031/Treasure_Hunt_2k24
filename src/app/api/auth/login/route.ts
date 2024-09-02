@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
 
         if (!LoginVerified.success) {
             return NextResponse.json({
-                status: 400,
                 success: false,
                 message: 'Invalid login data provided',
                 body: { message: 'Invalid login data' },
@@ -28,7 +27,6 @@ export async function POST(req: NextRequest) {
 
         if (team.length === 0) {
             return NextResponse.json({
-                status: 404,
                 success: false,
                 message: 'Team not found or invalid team name',
                 body: { message: 'Team not found or invalid team name' },
@@ -39,7 +37,6 @@ export async function POST(req: NextRequest) {
 
         if (teamData.isDisqualified || teamData.numberOfLives === 0) {
             return NextResponse.json({
-                status: 403,
                 success: false,
                 message: 'Team is disqualified',
                 body: { message: 'Team is disqualified' },
@@ -54,7 +51,6 @@ export async function POST(req: NextRequest) {
 
     } catch (error) {
         return NextResponse.json({
-            status: 500,
             success: false,
             message: 'An error occurred while processing your request.',
         });

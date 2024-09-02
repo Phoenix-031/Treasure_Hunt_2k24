@@ -3,6 +3,7 @@ import connectDB from "../_config/connectDb"
 import { z } from "zod";
 import TeamModel from "../_model/team.model";
 import QuestionModel from "../_model/question.model";
+import { verify } from "crypto";
 
 const VerifySchema = z.object({
     teamId : z.string({
@@ -26,9 +27,9 @@ export async function POST(req : NextRequest) {
 
         if(!verifyBody.success) {
             return NextResponse.json({
-                status: 400,
                 success : false,
-                message: 'Invalid request body',
+                message: verifyBody.error,
+                zodErrorBody : verifyBody.error ?verifyBody.error : null,
                 body: JSON.stringify(verifyBody.error),
             })
         }
@@ -41,7 +42,6 @@ export async function POST(req : NextRequest) {
 
         if(!team) {
             return NextResponse.json({
-                status: 404,
                 success : false,
                 message: 'Team not found',
                 body: JSON.stringify({ message: "Team not found" }),
@@ -50,7 +50,6 @@ export async function POST(req : NextRequest) {
 
         if(team.isDisqualified || team.numberOfLives === 0) {
             return NextResponse.json({
-                status: 403,
                 success : false,
                 message: 'Team is disqualified',
                 body: JSON.stringify({ message: "Team is disqualified" }),
@@ -63,7 +62,6 @@ export async function POST(req : NextRequest) {
 
         if(!question) {
             return NextResponse.json({
-                status: 404,
                 success : false,
                 message: 'Question not found',
                 body: JSON.stringify({ message: "Question not found" }),
@@ -77,7 +75,6 @@ export async function POST(req : NextRequest) {
             );
 
             return NextResponse.json({
-                status: 400,
                 success : false,
                 message: 'Incorrect answer code',
                 body: JSON.stringify({ message: "Incorrect answer code" }),
@@ -89,11 +86,11 @@ export async function POST(req : NextRequest) {
         }, {
             $set: {
                 progressString: team.progressString + answerCode,
-            }
+                currentQuestionStage: team.currentQuestionStage + 1,
+            },
         })
 
         return NextResponse.json({
-            status: 200,
             success : true,
             message: 'Answer code verified',
             body: JSON.stringify({ message: "Answer code verified" }),
@@ -101,7 +98,6 @@ export async function POST(req : NextRequest) {
 
     } catch (error) {
         return NextResponse.json({
-            status: 500,
             message: 'An error occurred while processing your request.',
             body: JSON.stringify({ message: "Internal Server Error" }),
         })

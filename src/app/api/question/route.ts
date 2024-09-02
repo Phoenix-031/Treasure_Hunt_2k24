@@ -26,22 +26,25 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
 
-    const {success, data} = QuestionSchema.safeParse(body);
+    const QuestionVerified = QuestionSchema.safeParse(body);
 
-    if(!success) {
+    if(!QuestionVerified.success) {
         return NextResponse.json({
-            message :'Invalid data',
+            success: false,
+            zodErrorBody: QuestionVerified.error? QuestionVerified.error : null,
+            message: 'Invalid request body',
+            body: JSON.stringify(QuestionVerified),
         })
     }
     
     try {
         await connectDB();
         const res = await  QuestionModel.create({
-            question: data.question,
-            questionImage: data.questionImage,
-            questionId: data.questionId,
-            spotName: data.spotName,
-            answerCode: data.answerCode
+            question: QuestionVerified.data.question,
+            questionImage: QuestionVerified.data.questionImage,
+            questionId: QuestionVerified.data.questionId,
+            spotName: QuestionVerified.data.spotName,
+            answerCode: QuestionVerified.data.answerCode
         })
         
         return NextResponse.json({
