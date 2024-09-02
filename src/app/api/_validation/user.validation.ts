@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const memberSchema = z.object({
     name: z.string(),
-    espektroId : z.string().length(11),
+    espektroId : z.string(),
 })
 
 export const teamSchema = z.object({
