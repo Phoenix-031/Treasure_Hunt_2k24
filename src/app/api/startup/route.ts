@@ -10,7 +10,7 @@ export async function POST(req : NextRequest) {
     try {
 
         const body = await req.json();
-        
+
         const verifyBody = RequestSchema.safeParse(body);
 
         if(!verifyBody.success) {
@@ -53,7 +53,7 @@ export async function POST(req : NextRequest) {
             },
         },{
             new: true
-        })
+        }).select("progressString currentQuestionStage numberOfLives")
 
         return NextResponse.json({
             success : true,
