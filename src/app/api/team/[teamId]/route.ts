@@ -59,7 +59,7 @@ export async function PUT(req: NextRequest, { params }: { params: { teamId: stri
         const updatedTeam = await TeamModel.findOneAndUpdate(
             { teamId: teamId },
             { $set: updateFields },
-            { new: true , returnOriginal:false}
+            { new: true }
         );
 
         if (!updatedTeam) {
@@ -86,7 +86,7 @@ export async function PUT(req: NextRequest, { params }: { params: { teamId: stri
 export async function DELETE(req: NextRequest, { params }: { params: { teamId: string } }) {
     try {
         await connectDB();
-        const deleteTeam = await TeamModel.deleteOne({
+        await TeamModel.deleteOne({
             teamId : params.teamId,
         });
         return NextResponse.json({

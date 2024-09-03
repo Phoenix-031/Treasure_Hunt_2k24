@@ -67,39 +67,32 @@ export async function POST(req : NextRequest) {
             })
         }
 
-        if(question.answerCode !== answerCode) {
-            const updatedTeam = await TeamModel.findOneAndUpdate(
-                { teamId },
-                { $inc: { numberOfLives: -1 } },
-                {new : true },
-            ).select('numberOfLives');
+        if (question.answerCode !== answerCode) {
+            team.numberOfLives -= 1;
+            await team.save();
 
             return NextResponse.json({
-                success : false,
-                updatedTeam,
+                success: false,
+                updatedTeam: { numberOfLives: team.numberOfLives },
                 message: 'Incorrect answer code',
-                body: updatedTeam
-            })
+                body: { numberOfLives: team.numberOfLives },
+            });
         }
 
         const totalQuestions = await QuestionModel.countDocuments();
-        
-        const newTeam = await TeamModel.findOneAndUpdate({
-            teamId,
-        }, {
-            $set: {
-                progressString: team.progressString + answerCode +'_',
-                currentQuestionStage: team.currentQuestionStage + 1 > totalQuestions ? -1 : team.currentQuestionStage + 1,
-            },
-        },{
-            new : true
-        }).select("numberOfLives currentQuestionStage")
+        team.progressString += answerCode + '_';
+        team.currentQuestionStage = team.currentQuestionStage + 1 > totalQuestions ? -1 : team.currentQuestionStage + 1;
+
+        await team.save();
 
         return NextResponse.json({
-            success : true,
+            success: true,
             message: 'Answer code verified',
-            body: newTeam,
-        })
+            body: {
+                numberOfLives: team.numberOfLives,
+                currentQuestionStage: team.currentQuestionStage,
+            },
+        });
 
     } catch (error) {
         return NextResponse.json({

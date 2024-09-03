@@ -44,21 +44,19 @@ export async function POST(req : NextRequest) {
             })
         }
 
-        const newTeam = await TeamModel.findOneAndUpdate({
-            teamId
-        },{
-            $set : {
-                progressString: 'initialsol_',
-                currentQuestionStage : 1
-            },
-        },{
-            new: true
-        }).select("progressString currentQuestionStage numberOfLives")
+        team.progressString = 'initialsol_';
+        team.currentQuestionStage = 1;
 
+        await team.save();
+        
         return NextResponse.json({
             success : true,
             message: 'Access granted',
-            body: newTeam,
+            body: {
+                progressString: team.progressString,
+                currentQuestionStage : team.currentQuestionStage,
+                numberOfLives : team.numberOfLives,
+            },
         })
     } catch (error) {
         return NextResponse.json({
