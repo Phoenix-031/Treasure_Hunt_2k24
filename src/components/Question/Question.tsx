@@ -35,7 +35,6 @@ const Question = (props : QuestionProps) => {
   const qrCodeValue = useAppSelector(selectQrCodeValue)
 
   const verifyAnswer = useVerifyAnswer();
-  const getTeam = useGetTeamById(teamId);
 
   return (
     <div className={styles.main__question__container}>
@@ -95,7 +94,6 @@ const Question = (props : QuestionProps) => {
     },
      {
         onSuccess: async(res) =>{
-            console.log(res,"resres")
             if(!res.success){
                 res.zodErrorBody ? handleZodError(res.zodErrorBody) : (
                     toast.error(res.message)

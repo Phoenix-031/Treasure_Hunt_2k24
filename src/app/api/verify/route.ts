@@ -72,7 +72,7 @@ export async function POST(req : NextRequest) {
                 { teamId },
                 { $inc: { numberOfLives: -1 } },
                 {new : true },
-            );
+            ).select('numberOfLives');
 
             return NextResponse.json({
                 success : false,
@@ -93,7 +93,7 @@ export async function POST(req : NextRequest) {
             },
         },{
             new : true
-        })
+        }).select("numberOfLives currentQuestionStage")
 
         return NextResponse.json({
             success : true,
