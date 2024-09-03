@@ -57,12 +57,11 @@ const Home = () => {
   )
 
 async function startGame() {
-  const { data, isSuccess } = await getTeam.refetch();
-
   if(teamId === '') {
     router.push('/startup');
     return;
   }
+  const { data, isSuccess } = await getTeam.refetch();
 
   if (isSuccess && data) {
 
