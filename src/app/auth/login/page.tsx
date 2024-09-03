@@ -64,6 +64,8 @@ const Login = () => {
                 dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
                 if(res.body.currentQuestionStage === 0) {
                     router.push('/startup');
+                }else if(res.body.currentQuestionStage === -1) {
+                    router.push('/complete');
                 }else {
                     router.push(`/${res.body.teamId}/question/q${res.body.currentQuestionStage}`);
                 }
