@@ -9,7 +9,7 @@ import infinitioImg from'@/assets/images/infinitio.jpeg';
 
 import InstallPWAButton from '@/components/InstallPWAButton/InstallPWAButton'
 import { useAppSelector } from '@/hooks/redux.hook';
-import { selectTeamId } from '@/store/selectors/user.selector';
+import { selectTeamId, selectTeamName } from '@/store/selectors/user.selector';
 import { useGetTeamById } from '@/query/api/user.service';
 import { useRouter } from 'next/navigation';
 import FetchingLoader from '@/components/FetchingLoader/FetchingLoader';
@@ -19,6 +19,7 @@ const Home = () => {
 
   const router = useRouter();
   const teamId = useAppSelector(selectTeamId);
+  const  teamName = useAppSelector(selectTeamName);
   const getTeam = useGetTeamById(teamId);
 
   return (
@@ -57,14 +58,13 @@ const Home = () => {
   )
 
 async function startGame() {
-  if(teamId === '') {
-    router.push('/startup');
+  if(teamId === '' && teamName === '') {
+    router.push('/auth/login');
     return;
   }
   const { data, isSuccess } = await getTeam.refetch();
 
   if (isSuccess && data) {
-
     const teamData = data.data;
 
     if (teamData.currentQuestionStage === 0) {

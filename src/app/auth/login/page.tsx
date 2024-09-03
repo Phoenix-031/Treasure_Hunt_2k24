@@ -61,6 +61,7 @@ const Login = () => {
             if(res.success) {
                 dispatch(userActions.setTeamId(res.body.teamId));
                 dispatch(userActions.setTeamName(res.body.teamName));
+                dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
                 if(res.body.currentQuestionStage === 0) {
                     router.push('/startup');
                 }else {

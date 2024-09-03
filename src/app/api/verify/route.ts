@@ -68,15 +68,17 @@ export async function POST(req : NextRequest) {
         }
 
         if(question.answerCode !== answerCode) {
-            await TeamModel.updateOne(
+            const updatedTeam = await TeamModel.findOneAndUpdate(
                 { teamId },
-                { $inc: { numberOfLives: -1 } }
+                { $inc: { numberOfLives: -1 } },
+                {new : true },
             );
 
             return NextResponse.json({
                 success : false,
+                updatedTeam,
                 message: 'Incorrect answer code',
-                body: JSON.stringify({ message: "Incorrect answer code" }),
+                body: updatedTeam
             })
         }
 

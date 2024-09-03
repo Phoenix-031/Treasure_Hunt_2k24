@@ -77,11 +77,14 @@ const StartUp = () => {
       answer: initialPuzzleAnswer,
     },{
       onSuccess: async(res) =>{
+        console.log(res,"resres")
 
         if(res.success) {
+          console.log(res.body,"resbody")
           dispatch(userActions.setProgressString(res.body.setProgressString))
           dispatch(userActions.setCurrentQuestionNumber(res.body.currentQuestionStage));
-
+          dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
+          
           router.push(`${teamId}/question/q${res.body.currentQuestionStage}`)
           toast('Use your Lives carefully!!')
           queryClient.invalidateQueries({

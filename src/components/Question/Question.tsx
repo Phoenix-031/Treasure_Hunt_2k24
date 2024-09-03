@@ -95,6 +95,7 @@ const Question = (props : QuestionProps) => {
     },
      {
         onSuccess: async(res) =>{
+            console.log(res,"resres")
             if(!res.success){
                 res.zodErrorBody ? handleZodError(res.zodErrorBody) : (
                     toast.error(res.message)
