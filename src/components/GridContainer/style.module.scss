@@ -1,17 +1,4 @@
 .container {
-
-    // &>div:first-child {
-    //     width: 8rem;
-    //     height: 8rem;
-    //     // border: 1px solid red;
-    //     position: absolute;
-    //     background-color: var(--background-color);
-    //     border-radius: 50%;
-    //     bottom: 0;
-    //     right: 0;
-
-    // }
-
     &::before {
         content: '';
         position: absolute;
