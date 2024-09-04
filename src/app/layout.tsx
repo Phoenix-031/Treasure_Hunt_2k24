@@ -29,7 +29,7 @@ export default function RootLayout({
             <GridContainer>
                 {children}
             </GridContainer>
-            <Toaster position="top-right" richColors/>
+            <Toaster position="top-right" richColors duration={1200}/>
             {/* <PermissionPopupWrapper /> */}
           </QueryProvider>
         </StoreProvider>
