@@ -14,7 +14,6 @@ import { selectTeamId, selectTeamName } from '@/store/selectors/user.selector';
 import { useGetTeamById } from '@/query/api/user.service';
 import { useRouter } from 'next/navigation';
 import FetchingLoader from '@/components/FetchingLoader/FetchingLoader';
-import GridContainer from '@/components/GridContainer/GridContainer';
 
 
 const Home = () => {
@@ -25,7 +24,6 @@ const Home = () => {
   const getTeam = useGetTeamById(teamId);
 
   return (
-    <GridContainer>
       <div className={styles.main__container}>
           <div className='flex justify-center items-center'>
             <InstallPWAButton />
@@ -58,7 +56,6 @@ const Home = () => {
             </div>
           </div>
       </div>
-    </GridContainer>
   )
 
 async function startGame() {

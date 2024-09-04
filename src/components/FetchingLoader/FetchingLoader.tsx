@@ -11,4 +11,4 @@ const FetchingLoader = () => {
   )
 }
 
-export default FetchingLoader
+export default FetchingLoader;

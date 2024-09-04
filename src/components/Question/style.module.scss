@@ -41,11 +41,16 @@
             border-bottom: 1px solid white;
             width: 80%;
         }
+
+        &>div:last-child {
+            width: 80%;
+        }
     }
 
 
     &>div:last-child {
-        @include flex-container(column, center, center);
+        @include flex-container(row, center, center);
+
 
         &>div:last-child {
             margin-top: 1rem;

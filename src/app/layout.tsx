@@ -7,6 +7,7 @@ import QueryProvider from "@/query/QueryProvider";
 import PermissionPopupWrapper from "@/components/PermissionPopup/PermissionPopupWrapper";
 
 import { Toaster } from "sonner";
+import GridContainer from "@/components/GridContainer/GridContainer";
 
 
 export const metadata: Metadata = {
@@ -25,7 +26,9 @@ export default function RootLayout({
       <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
         <StoreProvider>
           <QueryProvider>
-            {children}
+            <GridContainer>
+                {children}
+            </GridContainer>
             <Toaster position="top-right" richColors/>
             {/* <PermissionPopupWrapper /> */}
           </QueryProvider>

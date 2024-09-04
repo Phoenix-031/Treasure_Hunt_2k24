@@ -27,6 +27,10 @@
             padding: 0.3rem;
             background-color: transparent;
             border-bottom: 1px solid var(--border-color);
+
+            &:focus {
+                outline: none;
+            }
         }
     }
 

@@ -13,7 +13,7 @@ import styles from './style.module.scss'
 import FetchingLoader from '@/components/FetchingLoader/FetchingLoader'
 import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
-import GridContainer from '@/components/GridContainer/GridContainer'
+import Input from '@/components/Input/Input'
 
 
 const StartUp = () => {
@@ -43,7 +43,6 @@ const StartUp = () => {
   }, [getTeam.isLoading, getTeam.data, getTeam, dispatch])
     
   return (
-    <GridContainer>
       <div className={styles.main__container}>
           <div className={styles.team__name}>
               <p>Pirate #{teamId}</p>
@@ -56,7 +55,7 @@ const StartUp = () => {
               </div>
           
               <div className={styles.answer__container}>
-                  <input type="text" placeholder="We r rooting for U" value={initialPuzzleAnswer} onChange={(e) => setIntialPuzzleAnswer(e.target.value) }/>
+                  <Input type='text' placeholder='We r rooting for U' value={initialPuzzleAnswer} onChange={(e) => setIntialPuzzleAnswer(e.target.value)} required={true}/>
                   {
                     verifyStartupAnswer.isPending ? <FetchingLoader /> : (
                       <button onClick={handleStartHunt}>Start Hunt</button>
@@ -65,7 +64,6 @@ const StartUp = () => {
               </div>
           </div>
       </div>
-    </GridContainer>
   )
 
   async function handleStartHunt() {
@@ -82,12 +80,12 @@ const StartUp = () => {
       onSuccess: async(res) =>{
 
         if(res.success) {
-          dispatch(userActions.setProgressString(res.body.setProgressString))
-          dispatch(userActions.setCurrentQuestionNumber(res.body.currentQuestionStage));
-          dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
           
           router.push(`${teamId}/question/q${res.body.currentQuestionStage}`)
           toast('Use your Lives carefully!!')
+          dispatch(userActions.setProgressString(res.body.setProgressString))
+          dispatch(userActions.setCurrentQuestionNumber(res.body.currentQuestionStage));
+          dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
           queryClient.invalidateQueries({
             queryKey:['team']
           })

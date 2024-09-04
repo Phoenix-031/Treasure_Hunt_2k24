@@ -10,7 +10,8 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamName } from '@/store/selectors/user.selector'
 import { useLoginTeam } from '@/query/api/auth.service'
-import GridContainer from '@/components/GridContainer/GridContainer'
+import FetchingLoader from '@/components/FetchingLoader/FetchingLoader'
+import Input from '@/components/Input/Input'
 
 type UserLoginFormType = z.infer<typeof FormType.UserLoginForm>
 
@@ -31,7 +32,6 @@ const Login = () => {
 
 
   return (
-    <GridContainer>
         <div className={styles.main__container}>
             <form onSubmit={handleSubmit(onSubmitForm)} className={styles.user__longin__form}>
                 <div>
@@ -46,7 +46,7 @@ const Login = () => {
                         required:'Please enter your espektro id'
                     })}/>
                 </div>
-                <button type='submit'>Lets go!!</button>
+                {loginTeam.isPending? <FetchingLoader/> : (<button type='submit'>Lets go!!</button>)}
             </form>
                 
             <div className='fixed bottom-0 p-8'>
@@ -54,7 +54,6 @@ const Login = () => {
             <button className={styles.button__general}>Register Now!!</button>
             </div>
         </div>
-    </GridContainer>
   )
 
   async function onSubmitForm(data : UserLoginFormType) {
@@ -62,9 +61,6 @@ const Login = () => {
     await loginTeam.mutateAsync(data, {
         onSuccess: (res) => {
             if(res.success) {
-                dispatch(userActions.setTeamId(res.body.teamId));
-                dispatch(userActions.setTeamName(res.body.teamName));
-                dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
 
                 if(res.body.currentQuestionStage === 0) {
                     router.push('/startup');
@@ -73,6 +69,10 @@ const Login = () => {
                 }else {
                     router.push(`/${res.body.teamId}/question/q${res.body.currentQuestionStage}`);
                 }
+
+                dispatch(userActions.setTeamId(res.body.teamId));
+                dispatch(userActions.setTeamName(res.body.teamName));
+                dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
             }
         },
         onError: (err) => {

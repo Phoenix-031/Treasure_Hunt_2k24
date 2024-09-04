@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import styles from './style.module.scss';
 import { useGetLeaderboard } from '@/query/api/user.service';

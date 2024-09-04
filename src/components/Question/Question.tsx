@@ -1,18 +1,20 @@
 'use client'
 
-import React, { useActionState } from 'react'
+import React from 'react'
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook';
 import { userActions } from '@/store/slices/user.slice';
 import { selectNumberOfLives, selectQrCodeValue, selectTeamId } from '@/store/selectors/user.selector';
-import { useGetTeamById, useVerifyAnswer } from '@/query/api/user.service';
+import { useVerifyAnswer } from '@/query/api/user.service';
 
 import styles from './style.module.scss';
 
 import { handleZodError } from '@/error/handleZodError';
 import { useQueryClient } from '@tanstack/react-query';
+import Input from '../Input/Input';
+import FetchingLoader from '../FetchingLoader/FetchingLoader';
 
 type QuestionProps = {
     questionNumber : number
@@ -53,19 +55,27 @@ const Question = (props : QuestionProps) => {
 
         <div>
             <p>Code: </p>
-            <p>{qrCodeValue}</p>
+            <div>
+                <Input type="text" value={qrCodeValue} disabled={true} required={true}/>
+            </div>
         </div>
 
         <div>
             {qrscanner ? (
                 qrCodeValue !== '' ? (
                     <div>
-                        <button onClick={handleSubmit}>
-                            Submit
-                        </button>
-                        <button onClick={handleCancelCode}>
-                            Cancel
-                        </button>
+                        {
+                            verifyAnswer.isPending? <FetchingLoader /> : (
+                                <>
+                                    <button onClick={handleCancelCode}>
+                                        Cancel
+                                    </button>
+                                    <button onClick={handleSubmit}>
+                                        Submit
+                                    </button>
+                                </>
+                            )
+                        }
                     </div>
                 ) : (
                     <div>
@@ -98,11 +108,11 @@ const Question = (props : QuestionProps) => {
                 res.zodErrorBody ? handleZodError(res.zodErrorBody) : (
                     toast.error(res.message)
                 )
-            dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
+                dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
             }else{
                 if(res.body.currentQuestionStage === -1) {
-                    toast.success('Congrats! The hunt is complete')
                     router.push('/complete')
+                    toast.success('Congrats! The hunt is complete')
                 }else {
                     router.push(`/${teamId}/question/q${res.body.currentQuestionStage}`)
                 }
