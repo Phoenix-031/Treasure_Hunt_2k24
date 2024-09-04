@@ -9,7 +9,8 @@ const cookie= {
     name : 'session',
     options: {
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV === 'production',
+        domain: 'vercel.com',
     },
     duration: 24*60*60*1000
 }
