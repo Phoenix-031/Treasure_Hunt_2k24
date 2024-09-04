@@ -66,14 +66,14 @@ const Question = (props : QuestionProps) => {
                     <div>
                         {
                             verifyAnswer.isPending? <FetchingLoader /> : (
-                                <>
+                                <div className='w-[80%] gap-4 flex justify-center items-center'>
                                     <button onClick={handleCancelCode}>
                                         Cancel
                                     </button>
                                     <button onClick={handleSubmit}>
                                         Submit
                                     </button>
-                                </>
+                                </div>
                             )
                         }
                     </div>

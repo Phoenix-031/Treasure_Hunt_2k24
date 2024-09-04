@@ -55,7 +55,7 @@
         &>div:last-child {
             margin-top: 1rem;
             width: 100%;
-            @include flex-container(row, flex-end, center);
+            @include flex-container(row, center, center);
         }
 
         button {
