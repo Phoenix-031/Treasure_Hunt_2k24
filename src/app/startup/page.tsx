@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useLayoutEffect } from 'react'
+import React, { useEffect } from 'react'
 import { redirect, useRouter } from 'next/navigation'
 
 import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
@@ -13,6 +13,7 @@ import styles from './style.module.scss'
 import FetchingLoader from '@/components/FetchingLoader/FetchingLoader'
 import { toast } from 'sonner'
 import { useQueryClient } from '@tanstack/react-query'
+import GridContainer from '@/components/GridContainer/GridContainer'
 
 
 const StartUp = () => {
@@ -42,27 +43,29 @@ const StartUp = () => {
   }, [getTeam.isLoading, getTeam.data, getTeam, dispatch])
     
   return (
-    <div className={styles.main__container}>
-        <div className={styles.team__name}>
-            <p>Pirate #{teamId}</p>
-            <p className={styles.name}>{teamName}</p>
-        </div>
+    <GridContainer>
+      <div className={styles.main__container}>
+          <div className={styles.team__name}>
+              <p>Pirate #{teamId}</p>
+              <p className={styles.name}>{teamName}</p>
+          </div>
 
-        <div>
-            <div className={styles.start__event}>
-                <p>Answer the puzzle and have fun!!</p>
-            </div>
-        
-            <div className={styles.answer__container}>
-                <input type="text" placeholder="We r rooting for U" value={initialPuzzleAnswer} onChange={(e) => setIntialPuzzleAnswer(e.target.value) }/>
-                {
-                  verifyStartupAnswer.isPending ? <FetchingLoader /> : (
-                    <button onClick={handleStartHunt}>Start Hunt</button>
-                  )
-                }
-            </div>
-        </div>
-    </div>
+          <div>
+              <div className={styles.start__event}>
+                  <p>Answer the puzzle and have fun!!</p>
+              </div>
+          
+              <div className={styles.answer__container}>
+                  <input type="text" placeholder="We r rooting for U" value={initialPuzzleAnswer} onChange={(e) => setIntialPuzzleAnswer(e.target.value) }/>
+                  {
+                    verifyStartupAnswer.isPending ? <FetchingLoader /> : (
+                      <button onClick={handleStartHunt}>Start Hunt</button>
+                    )
+                  }
+              </div>
+          </div>
+      </div>
+    </GridContainer>
   )
 
   async function handleStartHunt() {

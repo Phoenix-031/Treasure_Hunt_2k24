@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux.hook'
 import { userActions } from '@/store/slices/user.slice'
 import { selectTeamName } from '@/store/selectors/user.selector'
 import { useLoginTeam } from '@/query/api/auth.service'
+import GridContainer from '@/components/GridContainer/GridContainer'
 
 type UserLoginFormType = z.infer<typeof FormType.UserLoginForm>
 
@@ -30,28 +31,30 @@ const Login = () => {
 
 
   return (
-    <div className={styles.main__container}>
-        <form onSubmit={handleSubmit(onSubmitForm)} className={styles.user__longin__form}>
-            <div>
-               <label htmlFor="">TeamId</label>
-                <input {...register('teamId',{
-                    required:'Please enter the team id to continue'
-                })}/>
-            </div>          
-            <div>
-                <label htmlFor="">EspektroId</label>
-                <input {...register('espektroId',{
-                    required:'Please enter your espektro id'
-                })}/>
+    <GridContainer>
+        <div className={styles.main__container}>
+            <form onSubmit={handleSubmit(onSubmitForm)} className={styles.user__longin__form}>
+                <div>
+                <label htmlFor="">TeamId</label>
+                    <input {...register('teamId',{
+                        required:'Please enter the team id to continue'
+                    })}/>
+                </div>          
+                <div>
+                    <label htmlFor="">EspektroId</label>
+                    <input {...register('espektroId',{
+                        required:'Please enter your espektro id'
+                    })}/>
+                </div>
+                <button type='submit'>Lets go!!</button>
+            </form>
+                
+            <div className='fixed bottom-0 p-8'>
+            <p className='text-lg mb-[1rem]'>Didnt register yet?? Dont miss out on the fun</p>
+            <button className={styles.button__general}>Register Now!!</button>
             </div>
-            <button type='submit'>Lets go!!</button>
-        </form>
-            
-        <div className='fixed bottom-0 p-8'>
-          <p className='text-lg mb-[1rem]'>Didnt register yet?? Dont miss out on the fun</p>
-          <button className={styles.button__general}>Register Now!!</button>
         </div>
-    </div>
+    </GridContainer>
   )
 
   async function onSubmitForm(data : UserLoginFormType) {
