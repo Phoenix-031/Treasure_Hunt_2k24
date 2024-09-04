@@ -41,6 +41,8 @@ export async function middleware(request :  NextRequest){
         else if(stageId !== questionId){
             if(teamData.data.currentQuestionStage === 0){
                 return NextResponse.redirect(new URL('/startup', request.url));
+            }else {
+                return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
             }
         }
         
