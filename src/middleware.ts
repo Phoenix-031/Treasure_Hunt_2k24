@@ -8,25 +8,27 @@ export async function middleware(request :  NextRequest){
     const response = NextResponse.next();
 
     const cookie = await verifySession();
+    console.log(cookie,"cookie")
 
-    if(!cookie?.data) {
-        return NextResponse.redirect(new URL('/auth/login', request.url));
-    }
+    // if(!cookie?.data) {
+    //     return NextResponse.redirect(new URL('/auth/login', request.url));
+    // }
 
     const questionId = request.nextUrl.pathname.split('/')[3]
-    // const teamId = request.nextUrl.pathname.split('/')[1]
-    const teamId = (cookie?.data as { teamId: string }).teamId;
+    const teamId = request.nextUrl.pathname.split('/')[1]
+    // const teamId = (cookie?.data as { teamId: string }).teamId;
 
     const team = await api.get(`/team/${teamId}`)
     const teamData= team.data;
     const currentTeamStage = teamData.data.currentQuestionStage;
     const stageId = `q${teamData.data.currentQuestionStage}`
 
-    // if(request.nextUrl.pathname.split('/')[1] === 'startup') {
-    //     if(teamData.data.currentQuestionStage !== 0)
-    //       return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
-    // }
-    // else {
+    if(request.nextUrl.pathname.split('/')[1] === 'startup') {
+        return response;
+        // if(teamData.data.currentQuestionStage !== 0)
+        //   return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
+    }
+    else {
         if(teamData.data.currentQuestionStage === -1) {
             return NextResponse.redirect(new URL('/complete', request.url));
         }
@@ -45,7 +47,7 @@ export async function middleware(request :  NextRequest){
                 return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
             }
         }  
-    // }
+    }
     return response;
 }
 
