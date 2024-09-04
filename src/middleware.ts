@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { verifySession } from "./lib/session";
-import { redirect } from "next/navigation";
 import { api } from "./query/api";
 
 export async function middleware(request :  NextRequest){
@@ -8,7 +7,6 @@ export async function middleware(request :  NextRequest){
     const response = NextResponse.next();
 
     const cookie = await verifySession();
-    console.log(cookie,"cookie")
 
     if(!cookie?.data) {
         return NextResponse.redirect(new URL('/auth/login', request.url));
@@ -42,8 +40,6 @@ export async function middleware(request :  NextRequest){
         else if(stageId !== questionId){
             if(teamData.data.currentQuestionStage === 0){
                 return NextResponse.redirect(new URL('/startup', request.url));
-            }else {
-                return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
             }
         }  
     }
@@ -51,5 +47,5 @@ export async function middleware(request :  NextRequest){
 }
 
 export const config = {
-    matcher: ['/((?!api).*)/question/q([1-6])','/startup'],
+    matcher: ['/((?!api).*)/question/q([1-6])'],
 }
