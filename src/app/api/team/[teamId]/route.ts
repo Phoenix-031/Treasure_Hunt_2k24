@@ -6,7 +6,6 @@ export async function GET(req : NextRequest, {params} : {params : {teamId : stri
     try {
         await connectDB();
         const teamId = params.teamId;
-        console.log(params,"team id")
 
         const res = await TeamModel.findOne({
             teamId: teamId,

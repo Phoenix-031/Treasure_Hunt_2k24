@@ -1,36 +1,58 @@
-// import {SignJWT, jwtVerify} from 'jose';
+import "server-only"
+import {SignJWT, jwtVerify} from 'jose';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-// const key = new TextEncoder().encode(process.env.JWT_SECRET)
+const key = new TextEncoder().encode(process.env.JWT_SECRET)
 
-// const cookie= {
-//     name : 'session',
-//     options: {
-//         httpOnly: true,
-//         sameSite: 'lax',
-//         secure: true,
-//         path:'/'
-//     },
-//     duration: 24*60*60*1000
-// }
-// export async function encrypt(payload : any) {
-//     return new SignJWT(payload)
-//         .setProtectedHeader({alg: 'HS256'})
-//         .setIssuedAt()
-//         .setExpirationTime('3h')
-//         .sign(key);
-// }
+const cookie= {
+    name : 'session',
+    options: {
+        httpOnly: true,
+        secure: true,
+    },
+    duration: 24*60*60*1000
+}
+export async function encrypt(payload : any) {
+    return new SignJWT(payload)
+        .setProtectedHeader({alg: 'HS256'})
+        .setIssuedAt()
+        .setExpirationTime('3h')
+        .sign(key);
+}
 
-// export async function decrypt(session) {
-//     try {
-//         const {payload} = await jwtVerify(session, key, {
-//             algorithms: ['HS256']
-//         })
-//         return payload;
-//     } catch (error) {
-//         return null;
-//     }
-// }
+export async function decrypt(session : any) {
+    try {
+        const {payload} = await jwtVerify(session, key, {
+            algorithms: ['HS256']
+        })
+        return payload;
+    } catch (error) {
+        return null;
+    }
+}
 
-// export async function createSession() {
-    
-// }
+
+export async function createSession(data : any) {
+    const expires = new Date(Date.now() + cookie.duration);
+    const session = await encrypt({data, expires})
+
+    cookies().set(cookie.name, session, {
+        ...cookie.options,
+        expires,
+        sameSite: 'lax',
+    });
+}
+
+export async function verifySession() {
+
+    const usercookie  = cookies().get(cookie.name)?.value;
+    const session = await decrypt(usercookie);
+
+    return session;
+}
+
+export async function destroySession() {
+    cookies().delete(cookie.name);
+    redirect('/');
+}

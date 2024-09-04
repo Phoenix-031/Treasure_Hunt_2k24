@@ -88,7 +88,7 @@ const Question = (props : QuestionProps) => {
   )
 
   function handleScanQR() {
-    router.push('/scan');
+    router.replace('/scan');
   }
 
   function handleCancelCode() {
@@ -111,10 +111,10 @@ const Question = (props : QuestionProps) => {
                 dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
             }else{
                 if(res.body.currentQuestionStage === -1) {
-                    router.push('/complete')
+                    router.replace('/complete')
                     toast.success('Congrats! The hunt is complete')
                 }else {
-                    router.push(`/${teamId}/question/q${res.body.currentQuestionStage}`)
+                    router.replace(`/${teamId}/question/q${res.body.currentQuestionStage}`)
                 }
                 dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
                 dispatch(userActions.setCurrentQuestionNumber(res.body.currentQuestionStage));

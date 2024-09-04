@@ -7,7 +7,6 @@ export const useGetQuestions = () => {
         queryKey: ["questions"],
         queryFn: async () => {
             const res = await api.get('/')
-            console.log(res,"rsponse")
             return res.data;
         },
     });

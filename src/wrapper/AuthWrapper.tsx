@@ -19,7 +19,6 @@ export const withAuth = (WrappedComponent: any) => {
     console.log(questionNumber, progress)
     
     useLayoutEffect(() => {
-        console.log(questionNumber,"qyestn")
       if (progress !== questionNumber) {
         router.push(`/question/q${currentQuestionNumber}`);
       }

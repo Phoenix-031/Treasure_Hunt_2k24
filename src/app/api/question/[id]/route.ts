@@ -8,7 +8,6 @@ export async function GET(req : NextRequest,{params} : {params : {id : string}})
     try {
         await connectDB();
         const questionId = params.id;
-        console.log(questionId,"questionid")
 
         const result= await QuestionModel.find({
             questionId: questionId
