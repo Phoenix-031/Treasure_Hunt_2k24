@@ -2,9 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '../../_config/connectDb';
 import { LoginSchema } from '../../_validation/user.validation';
 import TeamModel from '../../_model/team.model';
-import jwt from 'jsonwebtoken';
 import { createSession } from '@/lib/session';
-import { cookies } from 'next/headers';
 
 export async function POST(req: NextRequest) {
     try {
