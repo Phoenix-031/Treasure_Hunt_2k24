@@ -13,7 +13,6 @@ export async function middleware(request :  NextRequest){
     }
 
     const questionId = request.nextUrl.pathname.split('/')[3]
-    // const teamId = request.nextUrl.pathname.split('/')[1]
     const teamId = (cookie?.data as { teamId: string }).teamId;
 
     const team = await api.get(`/team/${teamId}`)
@@ -24,6 +23,9 @@ export async function middleware(request :  NextRequest){
     if(request.nextUrl.pathname.split('/')[1] === 'startup') {
         if(teamData.data.currentQuestionStage !== 0)
           return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
+        else if(teamData.data.currentQuestionStage === -1){
+            return NextResponse.redirect(new URL('/complete', request.url));
+        }
     }
     else {
         if(teamData.data.currentQuestionStage === -1) {
