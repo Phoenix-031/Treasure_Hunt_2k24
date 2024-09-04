@@ -22,11 +22,11 @@ export async function middleware(request :  NextRequest){
     const currentTeamStage = teamData.data.currentQuestionStage;
     const stageId = `q${teamData.data.currentQuestionStage}`
 
-    if(request.nextUrl.pathname.split('/')[1] === 'startup') {
-        if(teamData.data.currentQuestionStage !== 0)
-          return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
-    }
-    else {
+    // if(request.nextUrl.pathname.split('/')[1] === 'startup') {
+    //     if(teamData.data.currentQuestionStage !== 0)
+    //       return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
+    // }
+    // else {
         if(teamData.data.currentQuestionStage === -1) {
             return NextResponse.redirect(new URL('/complete', request.url));
         }
@@ -44,10 +44,8 @@ export async function middleware(request :  NextRequest){
             }else {
                 return NextResponse.redirect(new URL(`/${teamId}/question/q${teamData.data.currentQuestionStage}`, request.url));
             }
-        }
-        
-    }
-
+        }  
+    // }
     return response;
 }
 
