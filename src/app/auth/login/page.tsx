@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useLayoutEffect, useState } from 'react'
+import React from 'react'
 import styles from './style.module.scss'
 import { FormType } from '@/types/form.type'
 import { z } from 'zod'
@@ -62,6 +62,7 @@ const Login = () => {
                 dispatch(userActions.setTeamId(res.body.teamId));
                 dispatch(userActions.setTeamName(res.body.teamName));
                 dispatch(userActions.setNumberOfLives(res.body.numberOfLives));
+
                 if(res.body.currentQuestionStage === 0) {
                     router.push('/startup');
                 }else if(res.body.currentQuestionStage === -1) {
