@@ -49,5 +49,5 @@ export async function middleware(request :  NextRequest){
 }
 
 export const config = {
-    matcher: ['/((?!api).*)/question/q([1-6])'],
+    matcher: ['/((?!api).*)/question/q([1-6])','/startup'],
 }
