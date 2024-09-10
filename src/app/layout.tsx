@@ -2,12 +2,20 @@ import type { Metadata } from "next";
 import '../sass/global.scss';
 import { Fonts } from "@/lib/fonts";
 
+import localFont from '@next/font/local'
+
 import StoreProvider from "@/store/StoreProvider";
 import QueryProvider from "@/query/QueryProvider";
 import PermissionPopupWrapper from "@/components/PermissionPopup/PermissionPopupWrapper";
 
 import { Toaster } from "sonner";
 import GridContainer from "@/components/GridContainer/GridContainer";
+
+const azonix = localFont({
+  src: [{
+    path : '../assets/fonts/azonix/Azonix.otf',
+  }]
+})
 
 
 export const metadata: Metadata = {
@@ -23,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${Fonts.inter.className} ${Fonts.roboto.className}`}>
+      <body>
         <StoreProvider>
           <QueryProvider>
             <GridContainer>

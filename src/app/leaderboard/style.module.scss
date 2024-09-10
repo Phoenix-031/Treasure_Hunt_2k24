@@ -1,7 +1,6 @@
 @import '../../sass/functions';
 
 .main__container {
-    font-family: Poppins, sans-serif;
     border: 1px solid var(--border-color);
     width: 100vw;
     height: 100vh;
@@ -10,6 +9,9 @@
     color: var(--text-color);
     padding: 1.5rem;
     @include flex-container(column, flex-start, center);
+    font-family: "Protest Guerrilla", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 
     &>div:nth-child(2) {
         margin-top: 1rem;
